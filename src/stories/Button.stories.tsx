@@ -43,7 +43,7 @@ export const Primary: Story = {
     variant: 'primary',
     size: 'md',
     showLeadingIcon: true,
-    showTrailingIcon: true,
+    showTrailingIcon: false,
     theme: 'oyo',
   },
 };
@@ -54,7 +54,7 @@ export const Secondary: Story = {
     variant: 'secondary',
     size: 'md',
     showLeadingIcon: true,
-    showTrailingIcon: true,
+    showTrailingIcon: false,
     theme: 'oyo',
   },
 };
@@ -65,7 +65,7 @@ export const Outline: Story = {
     variant: 'outline',
     size: 'md',
     showLeadingIcon: true,
-    showTrailingIcon: true,
+    showTrailingIcon: false,
     theme: 'oyo',
   },
 };
@@ -75,8 +75,8 @@ export const Link: Story = {
     children: 'Button',
     variant: 'link',
     size: 'md',
-    showLeadingIcon: true,
-    showTrailingIcon: true,
+    showLeadingIcon: false,
+    showTrailingIcon: false,
     theme: 'oyo',
   },
 };
