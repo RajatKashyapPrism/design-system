@@ -1,73 +1,148 @@
-# React + TypeScript + Vite
+# Component Library
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A design system component library with **seamless Figma to Storybook integration**, enabling AI agents to automatically detect and use components from your design files.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎨 **Design-Code Sync**: Component metadata in Figma descriptions maps to Storybook implementations
+- 🤖 **AI Agent Ready**: MCP Figma tools can auto-detect available components
+- 📦 **Token-Based Theming**: Design tokens for colors, spacing, typography, and themes
+- 🧩 **Reusable Components**: Button (more components coming soon)
+- 📚 **Storybook Documentation**: Interactive component playground
 
-## React Compiler
+## 🚀 Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Development
 
-## Expanding the ESLint configuration
+```bash
+# Install dependencies
+npm install
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Start Storybook
+npm run storybook
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Using Components
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```tsx
+import { Button } from './stories/Button';
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+function App() {
+  return (
+    <Button 
+      variant="primary" 
+      size="md" 
+      label="Click me"
+    />
+  );
+}
 ```
+
+## 🎯 Figma Integration
+
+### For Designers
+
+Add this metadata to your Figma component descriptions:
+
+```
+[Storybook] Button
+[Import] ./stories/Button
+[Category] Core/Buttons
+
+variant=primary, size=md, onBackground=false
+```
+
+See **[FIGMA_DESCRIPTION_GUIDE.md](./FIGMA_DESCRIPTION_GUIDE.md)** for detailed instructions.
+
+### For Developers & AI Agents
+
+```typescript
+import { parseComponentInfo } from './utils/figmaStorybook';
+
+// Parse Figma design context (from MCP tools)
+const componentInfo = parseComponentInfo(designContext);
+
+if (componentInfo.storybook.isAvailable) {
+  // ✅ Component exists - use it!
+  console.log(componentInfo.importStatement);
+  console.log(componentInfo.usageCode);
+}
+```
+
+See **[FIGMA_STORYBOOK_MAPPING.md](./FIGMA_STORYBOOK_MAPPING.md)** for complete mapping reference.
+
+## 📂 Project Structure
+
+```
+component-library/
+├── src/
+│   ├── stories/          # Storybook components
+│   │   ├── Button.tsx
+│   │   └── Button.stories.tsx
+│   └── utils/
+│       └── figmaStorybook.ts  # Figma-Storybook parser
+├── tokens/              # Design tokens
+│   ├── colours/
+│   ├── density/
+│   ├── dimension/
+│   └── theme/
+├── FIGMA_STORYBOOK_MAPPING.md    # Component mapping reference
+├── FIGMA_DESCRIPTION_GUIDE.md    # Figma setup guide
+└── README.md
+```
+
+## 🎨 Available Components
+
+- [x] **Button** - Primary, Secondary, Tertiary, Neutral, Hyperlink, Underlined variants
+- [ ] Input (planned)
+- [ ] Card (planned)
+- [ ] Modal (planned)
+
+## 🧪 Tech Stack
+
+- **React** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool & dev server
+- **Storybook** - Component documentation
+- **Vitest** - Unit testing (configured)
+
+---
+
+## 🔧 Configuration
+
+This project uses:
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) for Fast Refresh
+- ESLint for code quality
+- TypeScript for type checking
+
+### Scripts
+
+```bash
+npm run dev          # Start Vite dev server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run storybook    # Start Storybook dev server
+npm run build-storybook  # Build Storybook for deployment
+```
+
+## 📖 Documentation
+
+- **[README.md](./README.md)** - This file (project overview)
+- **[FIGMA_DESCRIPTION_GUIDE.md](./FIGMA_DESCRIPTION_GUIDE.md)** - How to format Figma component descriptions
+- **[FIGMA_STORYBOOK_MAPPING.md](./FIGMA_STORYBOOK_MAPPING.md)** - Complete Figma-Storybook mapping reference
+- **[Button component](./src/stories/Button.tsx)** - Example component implementation
+
+## 🤝 Contributing
+
+1. Add metadata to Figma component descriptions (see FIGMA_DESCRIPTION_GUIDE.md)
+2. Implement components in `src/stories/`
+3. Create Storybook stories for documentation
+4. Update FIGMA_STORYBOOK_MAPPING.md with new mappings
+
+## 📜 License
+
+This project is part of a design system initiative.
+

@@ -81,7 +81,7 @@ export function Button({
   label1 = true,
   leadingIcon = false,
   leadingIcon1 = null,
-  onBackground, // Reserved for future use
+  onBackground = false,
   size = 'xs',
   split = false,
   theme: themeName = 'oyo',
@@ -90,8 +90,6 @@ export function Button({
   variant = 'primary',
   onClick,
 }: ButtonProps) {
-  // onBackground is reserved for future use
-  void onBackground;
   // Use provided props instead of internal state
   const displayLabel = children !== undefined ? children : label;
   
@@ -112,11 +110,23 @@ export function Button({
   const pressedColorPrimary = theme?.colour?.interaction?.background?.intense?.brand?.primary?.pressed?.$value?.hex || '#A10D26';
   const textColorOnPrimary = theme?.colour?.text?.intense?.["on"]?.intense?.brand?.primary?.$value?.hex || '#FFFFFF';
   
+  // PRIMARY VARIANT - on background (inverted)
+  const bgColorPrimaryInverted = theme?.colour?.background?.intense?.brand?.invert?.primary?.$value?.hex || '#FFFFFF';
+  const hoverColorPrimaryInverted = theme?.colour?.interaction?.background?.intense?.brand?.invert?.primary?.hover?.$value?.hex || '#F0F0F0';
+  const pressedColorPrimaryInverted = theme?.colour?.interaction?.background?.intense?.brand?.invert?.primary?.pressed?.$value?.hex || '#E0E0E0';
+  const textColorOnPrimaryInverted = theme?.colour?.text?.intense?.["on"]?.intense?.brand?.invert?.primary?.$value?.hex || '#282828';
+  
   // SECONDARY VARIANT - filled with brand secondary color
   const bgColorSecondary = theme?.colour?.background?.intense?.brand?.secondary?.$value?.hex || '#282828';
   const hoverColorSecondary = theme?.colour?.interaction?.background?.intense?.brand?.secondary?.hover?.$value?.hex || '#383838';
   const pressedColorSecondary = theme?.colour?.interaction?.background?.intense?.brand?.secondary?.pressed?.$value?.hex || '#191919';
   const textColorOnSecondary = theme?.colour?.text?.intense?.["on"]?.intense?.brand?.secondary?.$value?.hex || '#FFFFFF';
+  
+  // SECONDARY VARIANT - on background (inverted)
+  const bgColorSecondaryInverted = theme?.colour?.background?.intense?.brand?.invert?.secondary?.$value?.hex || '#FFFFFF';
+  const hoverColorSecondaryInverted = theme?.colour?.interaction?.background?.intense?.brand?.invert?.secondary?.hover?.$value?.hex || '#F0F0F0';
+  const pressedColorSecondaryInverted = theme?.colour?.interaction?.background?.intense?.brand?.invert?.secondary?.pressed?.$value?.hex || '#E0E0E0';
+  const textColorOnSecondaryInverted = theme?.colour?.text?.intense?.["on"]?.intense?.brand?.invert?.secondary?.$value?.hex || '#282828';
   
   // OUTLINE VARIANT - border only with brand secondary color
   const borderColorOutline = theme?.colour?.border?.intense?.brand?.secondary?.$value?.hex || '#282828';
@@ -131,6 +141,18 @@ export function Button({
   // UNDERLINED VARIANT - neutral text with underline
   const textColorUnderlined = theme?.colour?.text?.intense?.neutral?.$value?.hex || '#282828';
   const hoverBgUnderlined = theme?.colour?.interaction?.background?.subtle?.neutral?.["1"]?.hover?.$value?.hex || '#F5F5F5';
+  
+  // NEUTRAL VARIANT - filled with dark neutral color
+  const bgColorNeutral = theme?.colour?.background?.intense?.neutral?.["3"]?.$value?.hex || '#282828';
+  const hoverColorNeutral = theme?.colour?.interaction?.background?.intense?.neutral?.["3"]?.hover?.$value?.hex || '#383838';
+  const pressedColorNeutral = theme?.colour?.interaction?.background?.intense?.neutral?.["3"]?.pressed?.$value?.hex || '#191919';
+  const textColorOnNeutral = theme?.colour?.text?.intense?.["on"]?.intense?.$value?.hex || '#FFFFFF';
+  
+  // NEUTRAL VARIANT - on background
+  const bgColorNeutralInverted = theme?.colour?.background?.subtle?.neutral?.["1"]?.$value?.hex || '#FFFFFF';
+  const hoverColorNeutralInverted = theme?.colour?.interaction?.background?.subtle?.neutral?.["1"]?.hover?.$value?.hex || '#F5F5F5';
+  const pressedColorNeutralInverted = theme?.colour?.interaction?.background?.subtle?.neutral?.["1"]?.pressed?.$value?.hex || '#E8E8E8';
+  const textColorOnNeutralInverted = theme?.colour?.text?.intense?.neutral?.$value?.hex || '#282828';
   
   // ========================================
   // SEMANTIC BUTTON SIZE TOKENS
@@ -246,13 +268,32 @@ export function Button({
   const getBackgroundColor = () => {
     switch (mappedVariant) {
       case 'primary':
+        if (onBackground) {
+          if (isPressed) return pressedColorPrimaryInverted;
+          if (isHovered) return hoverColorPrimaryInverted;
+          return bgColorPrimaryInverted;
+        }
         if (isPressed) return pressedColorPrimary;
         if (isHovered) return hoverColorPrimary;
         return bgColorPrimary;
       case 'secondary':
+        if (onBackground) {
+          if (isPressed) return pressedColorSecondaryInverted;
+          if (isHovered) return hoverColorSecondaryInverted;
+          return bgColorSecondaryInverted;
+        }
         if (isPressed) return pressedColorSecondary;
         if (isHovered) return hoverColorSecondary;
         return bgColorSecondary;
+      case 'neutral':
+        if (onBackground) {
+          if (isPressed) return pressedColorNeutralInverted;
+          if (isHovered) return hoverColorNeutralInverted;
+          return bgColorNeutralInverted;
+        }
+        if (isPressed) return pressedColorNeutral;
+        if (isHovered) return hoverColorNeutral;
+        return bgColorNeutral;
       case 'tertiary':
         return 'transparent';
       case 'hyperlink':
@@ -260,8 +301,6 @@ export function Button({
         return 'transparent';
       case 'underlined':
         if (isHovered || isPressed) return hoverBgUnderlined;
-        return 'transparent';
-      case 'neutral':
         return 'transparent';
       default:
         return bgColorPrimary;
@@ -271,17 +310,17 @@ export function Button({
   const getTextColor = () => {
     switch (mappedVariant) {
       case 'primary':
-        return textColorOnPrimary;
+        return onBackground ? textColorOnPrimaryInverted : textColorOnPrimary;
       case 'secondary':
-        return textColorOnSecondary;
+        return onBackground ? textColorOnSecondaryInverted : textColorOnSecondary;
+      case 'neutral':
+        return onBackground ? textColorOnNeutralInverted : textColorOnNeutral;
       case 'tertiary':
         return textColorOutline;
       case 'hyperlink':
         if (isHovered || isPressed) return hoverColorLink;
         return textColorLink;
       case 'underlined':
-        return textColorUnderlined;
-      case 'neutral':
         return textColorUnderlined;
       default:
         return textColorOnPrimary;
@@ -317,7 +356,7 @@ export function Button({
   };
 
   // Hyperlink and underlined variants have minimal padding
-  const isMinimalVariant = mappedVariant === 'hyperlink' || mappedVariant === 'underlined' || mappedVariant === 'neutral';
+  const isMinimalVariant = mappedVariant === 'hyperlink' || mappedVariant === 'underlined';
   const paddingY = isMinimalVariant ? 2 : currentSize.paddingY;
   // Button outer horizontal padding (fixed/50 for xs, scale tokens for others)
   const paddingX = isMinimalVariant ? 8 : currentSize.paddingX;

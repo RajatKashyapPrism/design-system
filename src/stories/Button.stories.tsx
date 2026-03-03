@@ -1,14 +1,33 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Button } from './Button';
+
+// Wrapper component that manages interaction states internally
+function InteractiveButton(props: React.ComponentProps<typeof Button>) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsPressed(false);
+      }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+    >
+      <Button {...props} isHovered={isHovered} isPressed={isPressed} />
+    </div>
+  );
+}
 
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'hyperlink', 'underlined', 'neutral'],
-      description: 'Button style variant',
+      table: { disable: true }, // Hide variant from controls since we have separate stories
     },
     size: {
       control: 'select',
@@ -63,6 +82,7 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
+  render: (args) => <InteractiveButton {...args} />,
   args: {
     label: 'Button',
     variant: 'primary',
@@ -75,6 +95,7 @@ export const Primary: Story = {
 };
 
 export const Secondary: Story = {
+  render: (args) => <InteractiveButton {...args} />,
   args: {
     label: 'Button',
     variant: 'secondary',
@@ -87,6 +108,7 @@ export const Secondary: Story = {
 };
 
 export const Tertiary: Story = {
+  render: (args) => <InteractiveButton {...args} />,
   args: {
     label: 'Button',
     variant: 'tertiary',
@@ -99,6 +121,7 @@ export const Tertiary: Story = {
 };
 
 export const Hyperlink: Story = {
+  render: (args) => <InteractiveButton {...args} />,
   args: {
     label: 'Button',
     variant: 'hyperlink',
@@ -111,6 +134,7 @@ export const Hyperlink: Story = {
 };
 
 export const Underlined: Story = {
+  render: (args) => <InteractiveButton {...args} />,
   args: {
     label: 'Button',
     variant: 'underlined',
@@ -123,63 +147,12 @@ export const Underlined: Story = {
 };
 
 export const Neutral: Story = {
+  render: (args) => <InteractiveButton {...args} />,
   args: {
     label: 'Button',
     variant: 'neutral',
     size: 'md',
     leadingIcon: false,
-    trailingIcon: false,
-    label1: true,
-    theme: 'oyo',
-  },
-};
-
-export const WithSplit: Story = {
-  args: {
-    label: 'Button',
-    variant: 'primary',
-    size: 'md',
-    leadingIcon: true,
-    trailingIcon: true,
-    split: true,
-    label1: true,
-    theme: 'oyo',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    label: 'Button',
-    variant: 'primary',
-    size: 'md',
-    isDisabled: true,
-    leadingIcon: true,
-    trailingIcon: false,
-    label1: true,
-    theme: 'oyo',
-  },
-};
-
-export const Hovered: Story = {
-  args: {
-    label: 'Button',
-    variant: 'primary',
-    size: 'md',
-    isHovered: true,
-    leadingIcon: true,
-    trailingIcon: false,
-    label1: true,
-    theme: 'oyo',
-  },
-};
-
-export const Pressed: Story = {
-  args: {
-    label: 'Button',
-    variant: 'primary',
-    size: 'md',
-    isPressed: true,
-    leadingIcon: true,
     trailingIcon: false,
     label1: true,
     theme: 'oyo',
