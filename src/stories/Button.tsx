@@ -49,31 +49,51 @@ const themeMap: Record<string, any> = {
 };
 
 export type ThemeName = 'oyo' | 'belvilla' | 'checkin' | 'dancenter' | 'motel-6' | 'studio-6';
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'link' | 'underlined';
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'hyperlink' | 'underlined' | 'neutral';
 
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
   children?: React.ReactNode;
-  variant?: ButtonVariant;
+  isDisabled?: boolean;
+  isHovered?: boolean;
+  isPressed?: boolean;
+  label?: string;
+  label1?: boolean;
+  leadingIcon?: boolean;
+  leadingIcon1?: React.ReactNode | null;
+  onBackground?: boolean;
   size?: ButtonSize;
-  showLeadingIcon?: boolean;
-  showTrailingIcon?: boolean;
+  split?: boolean;
   theme?: ThemeName;
+  trailingIcon?: boolean;
+  trailingIcon1?: React.ReactNode | null;
+  variant?: ButtonVariant;
   onClick?: () => void;
 }
 
 export function Button({
-  children = 'Button',
-  variant = 'primary',
-  size = 'md',
-  showLeadingIcon = true,
-  showTrailingIcon = true,
+  children,
+  isDisabled = false,
+  isHovered = false,
+  isPressed = false,
+  label = 'Button',
+  label1 = true,
+  leadingIcon = false,
+  leadingIcon1 = null,
+  onBackground, // Reserved for future use
+  size = 'xs',
+  split = false,
   theme: themeName = 'oyo',
+  trailingIcon = false,
+  trailingIcon1 = null,
+  variant = 'primary',
   onClick,
 }: ButtonProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  // onBackground is reserved for future use
+  void onBackground;
+  // Use provided props instead of internal state
+  const displayLabel = children !== undefined ? children : label;
   
   // Responsive dimension tokens: mobile below 800px, desktop above
   const isMobile = useIsMobile();
@@ -161,6 +181,9 @@ export function Button({
   const iconSizeSmall = dimension?.fixed?.["200"]?.$value ?? 16;  // 16px for xs, sm, md
   const iconSizeLarge = dimension?.fixed?.["300"]?.$value ?? 24;  // 24px for lg
   
+  // Map variant - the variant type already supports all values
+  const mappedVariant = variant;
+
   // Size-specific styles matching Figma exactly
   const sizeStyles: Record<ButtonSize, {
     paddingY: number;
@@ -221,7 +244,7 @@ export function Button({
   // ========================================
   
   const getBackgroundColor = () => {
-    switch (variant) {
+    switch (mappedVariant) {
       case 'primary':
         if (isPressed) return pressedColorPrimary;
         if (isHovered) return hoverColorPrimary;
@@ -230,13 +253,15 @@ export function Button({
         if (isPressed) return pressedColorSecondary;
         if (isHovered) return hoverColorSecondary;
         return bgColorSecondary;
-      case 'outline':
+      case 'tertiary':
         return 'transparent';
-      case 'link':
+      case 'hyperlink':
         if (isHovered || isPressed) return hoverBgLink;
         return 'transparent';
       case 'underlined':
         if (isHovered || isPressed) return hoverBgUnderlined;
+        return 'transparent';
+      case 'neutral':
         return 'transparent';
       default:
         return bgColorPrimary;
@@ -244,17 +269,19 @@ export function Button({
   };
 
   const getTextColor = () => {
-    switch (variant) {
+    switch (mappedVariant) {
       case 'primary':
         return textColorOnPrimary;
       case 'secondary':
         return textColorOnSecondary;
-      case 'outline':
+      case 'tertiary':
         return textColorOutline;
-      case 'link':
+      case 'hyperlink':
         if (isHovered || isPressed) return hoverColorLink;
         return textColorLink;
       case 'underlined':
+        return textColorUnderlined;
+      case 'neutral':
         return textColorUnderlined;
       default:
         return textColorOnPrimary;
@@ -262,7 +289,7 @@ export function Button({
   };
 
   const getBorderWidth = () => {
-    if (variant === 'outline') {
+    if (mappedVariant === 'tertiary') {
       if (isPressed) return borderWidthPressed;
       if (isHovered) return borderWidthHover;
       return borderWidthActive;
@@ -271,7 +298,7 @@ export function Button({
   };
 
   const getBorderColor = () => {
-    if (variant === 'outline') {
+    if (mappedVariant === 'tertiary') {
       if (isHovered) return hoverBorderColorOutline;
       return borderColorOutline;
     }
@@ -279,18 +306,18 @@ export function Button({
   };
 
   const getTextDecoration = () => {
-    if (variant === 'underlined') return 'underline';
-    if (variant === 'link' && (isHovered || isPressed)) return 'underline';
+    if (mappedVariant === 'underlined') return 'underline';
+    if (mappedVariant === 'hyperlink' && (isHovered || isPressed)) return 'underline';
     return 'none';
   };
 
   const getTextDecorationStyle = () => {
-    if (variant === 'underlined') return 'dotted';
+    if (mappedVariant === 'underlined') return 'dotted';
     return 'solid';
   };
 
-  // Link and underlined variants have minimal padding
-  const isMinimalVariant = variant === 'link' || variant === 'underlined';
+  // Hyperlink and underlined variants have minimal padding
+  const isMinimalVariant = mappedVariant === 'hyperlink' || mappedVariant === 'underlined' || mappedVariant === 'neutral';
   const paddingY = isMinimalVariant ? 2 : currentSize.paddingY;
   // Button outer horizontal padding (fixed/50 for xs, scale tokens for others)
   const paddingX = isMinimalVariant ? 8 : currentSize.paddingX;
@@ -300,10 +327,7 @@ export function Button({
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => { setIsHovered(false); setIsPressed(false); }}
-      onMouseDown={() => setIsPressed(true)}
-      onMouseUp={() => setIsPressed(false)}
+      disabled={isDisabled}
       style={{
         // Layout - gap for sm/md/lg, no gap for xs
         display: 'inline-flex',
@@ -328,19 +352,20 @@ export function Button({
         // Typography (semantic font tokens)
         fontFamily: `'${fontFamily}', sans-serif`,
         fontSize: `${currentSize.fontSize}px`,
-        fontWeight: variant === 'link' || variant === 'underlined' ? 400 : fontWeight,
+        fontWeight: mappedVariant === 'hyperlink' || mappedVariant === 'underlined' ? 400 : fontWeight,
         lineHeight: `${lineHeight}px`,
         letterSpacing: `${letterSpacing}px`,
         textDecoration: getTextDecoration(),
         textDecorationStyle: getTextDecorationStyle() as 'solid' | 'dotted',
         
         // Interaction
-        cursor: 'pointer',
+        cursor: isDisabled ? 'not-allowed' : 'pointer',
+        opacity: isDisabled ? 0.5 : 1,
         transition: 'all 0.15s ease',
       }}
     >
       {/* L icon - Leading icon wrapper */}
-      {showLeadingIcon && (
+      {leadingIcon && (leadingIcon1 ? leadingIcon1 : (
         <span 
           style={{ 
             display: 'flex', 
@@ -355,20 +380,35 @@ export function Button({
             </svg>
           </span>
         </span>
-      )}
+      ))}
       {/* Label wrapper - contains text with horizontal padding for spacing */}
-      <span
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: `0 ${labelPaddingX}px`,
-          flexShrink: 0,
-        }}
-      >
-        {children}
-      </span>
+      {label1 && (
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: `0 ${labelPaddingX}px`,
+            flexShrink: 0,
+          }}
+        >
+          {displayLabel}
+        </span>
+      )}
+      {/* Split separator */}
+      {split && (
+        <span
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '8px',
+            opacity: 0.3,
+          }}
+        >
+          |
+        </span>
+      )}
       {/* T icon - Trailing icon wrapper */}
-      {showTrailingIcon && (
+      {trailingIcon && (trailingIcon1 ? trailingIcon1 : (
         <span 
           style={{ 
             display: 'flex', 
@@ -383,7 +423,7 @@ export function Button({
             </svg>
           </span>
         </span>
-      )}
+      ))}
     </button>
   );
 }

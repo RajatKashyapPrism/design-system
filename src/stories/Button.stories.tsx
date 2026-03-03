@@ -7,7 +7,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'link', 'underlined'],
+      options: ['primary', 'secondary', 'tertiary', 'hyperlink', 'underlined', 'neutral'],
       description: 'Button style variant',
     },
     size: {
@@ -15,16 +15,41 @@ const meta: Meta<typeof Button> = {
       options: ['xs', 'sm', 'md', 'lg'],
       description: 'Button size variant',
     },
-    children: {
-      control: 'text',
+    isDisabled: {
+      control: 'boolean',
+      description: 'Disable the button',
     },
-    showLeadingIcon: {
+    isHovered: {
+      control: 'boolean',
+      description: 'Control hover state',
+    },
+    isPressed: {
+      control: 'boolean',
+      description: 'Control pressed state',
+    },
+    label: {
+      control: 'text',
+      description: 'Button label text',
+    },
+    label1: {
+      control: 'boolean',
+      description: 'Show/hide the label',
+    },
+    leadingIcon: {
       control: 'boolean',
       description: 'Show/hide the leading icon',
     },
-    showTrailingIcon: {
+    trailingIcon: {
       control: 'boolean',
       description: 'Show/hide the trailing icon',
+    },
+    split: {
+      control: 'boolean',
+      description: 'Show/hide the split separator',
+    },
+    onBackground: {
+      control: 'boolean',
+      description: 'Adjust styling for background overlay',
     },
     theme: {
       control: 'select',
@@ -39,55 +64,124 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   args: {
-    children: 'Button',
+    label: 'Button',
     variant: 'primary',
     size: 'md',
-    showLeadingIcon: true,
-    showTrailingIcon: false,
+    leadingIcon: true,
+    trailingIcon: false,
+    label1: true,
     theme: 'oyo',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    children: 'Button',
+    label: 'Button',
     variant: 'secondary',
     size: 'md',
-    showLeadingIcon: true,
-    showTrailingIcon: false,
+    leadingIcon: true,
+    trailingIcon: false,
+    label1: true,
     theme: 'oyo',
   },
 };
 
-export const Outline: Story = {
+export const Tertiary: Story = {
   args: {
-    children: 'Button',
-    variant: 'outline',
+    label: 'Button',
+    variant: 'tertiary',
     size: 'md',
-    showLeadingIcon: true,
-    showTrailingIcon: false,
+    leadingIcon: true,
+    trailingIcon: false,
+    label1: true,
     theme: 'oyo',
   },
 };
 
-export const Link: Story = {
+export const Hyperlink: Story = {
   args: {
-    children: 'Button',
-    variant: 'link',
+    label: 'Button',
+    variant: 'hyperlink',
     size: 'md',
-    showLeadingIcon: false,
-    showTrailingIcon: false,
+    leadingIcon: false,
+    trailingIcon: false,
+    label1: true,
     theme: 'oyo',
   },
 };
 
 export const Underlined: Story = {
   args: {
-    children: 'Button',
+    label: 'Button',
     variant: 'underlined',
     size: 'md',
-    showLeadingIcon: false,
-    showTrailingIcon: false,
+    leadingIcon: false,
+    trailingIcon: false,
+    label1: true,
+    theme: 'oyo',
+  },
+};
+
+export const Neutral: Story = {
+  args: {
+    label: 'Button',
+    variant: 'neutral',
+    size: 'md',
+    leadingIcon: false,
+    trailingIcon: false,
+    label1: true,
+    theme: 'oyo',
+  },
+};
+
+export const WithSplit: Story = {
+  args: {
+    label: 'Button',
+    variant: 'primary',
+    size: 'md',
+    leadingIcon: true,
+    trailingIcon: true,
+    split: true,
+    label1: true,
+    theme: 'oyo',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    label: 'Button',
+    variant: 'primary',
+    size: 'md',
+    isDisabled: true,
+    leadingIcon: true,
+    trailingIcon: false,
+    label1: true,
+    theme: 'oyo',
+  },
+};
+
+export const Hovered: Story = {
+  args: {
+    label: 'Button',
+    variant: 'primary',
+    size: 'md',
+    isHovered: true,
+    leadingIcon: true,
+    trailingIcon: false,
+    label1: true,
+    theme: 'oyo',
+  },
+};
+
+export const Pressed: Story = {
+  args: {
+    label: 'Button',
+    variant: 'primary',
+    size: 'md',
+    isPressed: true,
+    leadingIcon: true,
+    trailingIcon: false,
+    label1: true,
     theme: 'oyo',
   },
 };
