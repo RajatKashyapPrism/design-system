@@ -11,14 +11,40 @@ This document explains how to connect Figma components to their Storybook implem
 - ✅ **Simple to maintain** (update once in component library)
 - ✅ **Self-documenting** (clear what's available in Storybook)
 
+### Two Supported Formats
+
+**Format 1: JSON (Best for AI/MCP tools)**
+```json
+{
+  "mcp": {
+    "source": "storybook",
+    "importPath": "./stories/Button",
+    "exportName": "Button",
+    "category": "Core/Buttons",
+    "chromaticComponentUrl": "https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral"
+  }
+}
+```
+
+**Format 2: Tags (Human-readable)**
+```
+[Storybook] Button
+[Import] ./stories/Button
+[Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
+```
+
+Both formats work - choose what fits your workflow!
+
 ### How to Add Metadata to Figma
 
-In your **Figma component library**, add this format to component descriptions:
+In your **Figma component library**, add metadata to component descriptions using either format above, then add your component properties:
 
 ```
 [Storybook] Button
 [Import] ./stories/Button
 [Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
 
 variant=primary, size=md, onBackground=false
 ```
@@ -27,6 +53,7 @@ variant=primary, size=md, onBackground=false
 - `[Storybook] ComponentName` - Indicates component is available in Storybook
 - `[Import] path/to/component` - Import path for the component
 - `[Category] Category/Name` - Optional categorization
+- `[Published] url` - Published Storybook/Chromatic URL (optional but recommended)
 - Then list component props using your existing naming convention
 
 **Example for Button Component:**
@@ -34,6 +61,7 @@ variant=primary, size=md, onBackground=false
 [Storybook] Button
 [Import] ./stories/Button
 [Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
 
 This is a reusable button component supporting multiple variants and sizes.
 
@@ -52,6 +80,7 @@ const designContext = `
 [Storybook] Button
 [Import] ./stories/Button
 [Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
 
 variant=primary, size=md, onBackground=false
 `;
@@ -64,7 +93,8 @@ const componentInfo = parseComponentInfo(designContext);
 //     isAvailable: true, 
 //     componentName: 'Button', 
 //     importPath: './stories/Button',
-//     category: 'Core/Buttons'
+//     category: 'Core/Buttons',
+//     publishedUrl: 'https://www.chromatic.com/component?appId=...'
 //   },
 //   props: { variant: 'primary', size: 'md', onBackground: false },
 //   importStatement: "import { Button } from './stories/Button';",

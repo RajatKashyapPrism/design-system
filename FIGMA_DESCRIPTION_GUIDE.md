@@ -7,37 +7,150 @@ This guide shows you how to format component descriptions in your Figma library 
 ## 📋 Quick Setup Checklist
 
 - [ ] Add `[Storybook] ComponentName` tag
-- [ ] Add `[Import] ./path/to/component` tag
+- [ ] Add `[Import] ./path/to/component` tag  
 - [ ] Add `[Category] Category/Name` tag (optional)
+- [ ] Add `[Published] https://chromatic-or-storybook-url` tag (recommended)
 - [ ] List component properties matching Storybook prop names
 - [ ] Publish your component library
 
 ## ✍️ Description Format
 
-```
-[Storybook] ComponentName
-[Import] ./path/to/component
-[Category] Category/Subcategory
+### Format 1: JSON (Recommended for AI Agents & MCP Tools)
 
-Brief description of what the component does.
+**Most reliable for programmatic parsing:**
+
+```json
+{
+  "mcp": {
+    "source": "storybook",
+    "importPath": "./stories/Button",
+    "exportName": "Button",
+    "category": "Core/Buttons",
+    "chromaticComponentUrl": "https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral"
+  }
+}
+```
+
+Then add your component description and properties below:
+
+```
+A versatile button component supporting multiple variants and sizes.
 
 Properties:
-propName1=value1, propName2=value2, propName3=value3
-
-Additional notes:
-- Any design notes
-- Usage guidelines
-- Accessibility info
+variant=primary, size=md, onBackground=false
 ```
 
-## 📝 Real Examples
+**Why JSON?**
+- ✅ Machine-readable and unambiguous
+- ✅ No regex parsing issues
+- ✅ Supports complex metadata (npm packages, versioning, etc.)
+- ✅ Recommended for MCP Figma tools
 
-### Button Component
+---
+
+### Format 2: Tags (Human-Readable Alternative)
+
+**Easier to read and edit manually:**
 
 ```
 [Storybook] Button
 [Import] ./stories/Button
 [Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=xxx&csfId=components-name--variant
+
+Brief description of what the component does.
+
+Properties:
+propName1=value1, propName2=value2, propName3=value3
+```
+
+**Why Tags?**
+- ✅ Easier to read in Figma UI
+- ✅ Simple to type and remember
+- ✅ Good for manual workflows
+
+---
+
+**Both formats work!** The parser supports both, so choose what works best for your team.
+
+### How to Get Your Published URL
+
+**From Chromatic:**
+1. Open your component in Chromatic
+2. Copy the URL from the browser
+   - Format: `https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral`
+   - The `appId` stays the same for all components in your library
+   - The `csfId` changes per component/variant (e.g., `components-button--primary`, `components-button--secondary`)
+
+**From Storybook (self-hosted):**
+1. Open your published Storybook
+2. Navigate to the component
+3. Copy the URL (e.g., `https://your-storybook.com/?path=/story/components-button--primary`)
+
+**Tip:** You can use a generic URL pointing to the component's main story, or specific URLs for each variant. AI agents will use this URL to show developers/designers where to preview the component.
+
+---
+
+### Import Path Options
+
+**For local development:**
+```json
+"importPath": "./stories/Button"
+```
+
+**For published npm packages:**
+```json
+"importPath": "@your-org/ui-components/button"
+```
+
+**For monorepo packages:**
+```json
+"importPath": "@workspace/components/button"
+```
+
+AI agents will use the exact import path you provide when generating code.
+
+## 📝 Real Examples
+
+### Button Component (JSON Format)
+
+```
+{
+  "mcp": {
+    "source": "storybook",
+    "importPath": "./stories/Button",
+    "exportName": "Button",
+    "category": "Core/Buttons",
+    "chromaticComponentUrl": "https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral"
+  }
+}
+
+A versatile button component supporting multiple variants, sizes, and interactive states. 
+Fully accessible and themeable across all brand variants.
+
+Properties:
+variant=primary, size=md, onBackground=false, leadingIcon=false, trailingIcon=false, split=false, label=Button, isHovered=false, isPressed=false, isDisabled=false
+
+Variants: primary, secondary, tertiary, neutral, hyperlink, underlined
+Sizes: xs, sm, md, lg
+Themes: oyo, belvilla, checkin, dancenter, motel-6, studio-6
+
+Usage:
+- Use primary for main CTAs
+- Use secondary for supporting actions
+- Use tertiary for low emphasis actions
+- Set onBackground=true when used on dark backgrounds or images
+```
+
+---
+
+### Button Component (Tag Format)
+
+```
+[Storybook] Button
+[Import] ./stories/Button
+[Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
 
 A versatile button component supporting multiple variants, sizes, and interactive states. 
 Fully accessible and themeable across all brand variants.

@@ -45,12 +45,28 @@ function App() {
 
 ### For Designers
 
-Add this metadata to your Figma component descriptions:
+Add metadata to your Figma component descriptions (choose one format):
 
+**JSON format (recommended for AI tools):**
+```json
+{
+  "mcp": {
+    "source": "storybook",
+    "importPath": "./stories/Button",
+    "exportName": "Button",
+    "chromaticComponentUrl": "https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral"
+  }
+}
+
+variant=primary, size=md, onBackground=false
+```
+
+**Tag format (human-readable):**
 ```
 [Storybook] Button
 [Import] ./stories/Button
 [Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
 
 variant=primary, size=md, onBackground=false
 ```
@@ -69,6 +85,7 @@ if (componentInfo.storybook.isAvailable) {
   // ✅ Component exists - use it!
   console.log(componentInfo.importStatement);
   console.log(componentInfo.usageCode);
+  console.log("View in Storybook:", componentInfo.storybook.publishedUrl);
 }
 ```
 
