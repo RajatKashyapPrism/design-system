@@ -1,0 +1,28 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  check:
+    name: Validate conventional commit PR title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Allowed types (maps to semantic-release bump rules):
+          #   fix → patch, feat → minor, feat! / BREAKING CHANGE → major
+          types: |
+            fix
+            feat
+            chore
+            docs
+            refactor
+            perf
+            test
+            build
+            ci
+          requireScope: false
