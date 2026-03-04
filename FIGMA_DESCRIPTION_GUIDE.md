@@ -2,22 +2,129 @@
 
 ## 🎯 Purpose
 
-This guide shows you how to format component descriptions in your Figma library so that AI agents with MCP tools can automatically detect and use your Storybook components.
+This guide shows you how to format component descriptions in your Figma library so that AI agents with MCP tools can **automatically detect and use your Storybook components**.
+
+> **⭐ New in v0.1.0**: Automatic prop-based component detection—no manual metadata required!
 
 ## 📋 Quick Setup Checklist
 
+### Recommended (Automatic Detection) ✨
+- [x] List component properties matching Storybook prop names
+- [ ] Optional: Add metadata tags for disambiguation
+
+### Optional (Manual Metadata - Only if auto-detection fails)
 - [ ] Add `[Storybook] ComponentName` tag
 - [ ] Add `[Import] ./path/to/component` tag  
 - [ ] Add `[Category] Category/Name` tag (optional)
-- [ ] Add `[Published] https://chromatic-or-storybook-url` tag (recommended)
-- [ ] List component properties matching Storybook prop names
-- [ ] Publish your component library
+- [ ] Add `[Published] https://chromatic-or-storybook-url` tag
+
+## ✨ How It Works: Automatic Prop-Based Detection
+
+AI agents now use **intelligent prop matching** to automatically detect your Storybook components—no manual metadata required!
+
+### The Magic: What Happens Behind the Scenes
+
+```
+Figma Component
+    ↓
+Extract properties: "variant, size, isDisabled, ..."
+    ↓
+Compare against installed @prism-design-global/component-library
+    ↓
+Match against Button, Card, Input, etc. prop signatures
+    ↓
+Calculate confidence score
+    ↓
+✅ Auto-detect: "This is a Button component!"
+```
+
+### Example Flow
+
+**Figma Component has:**
+```
+Properties:
+variant=primary, size=md, isDisabled=false, label=Button
+```
+
+**Detection Algorithm:**
+1. Extracts: `variant, size, isDisabled, label`
+2. Checks Button component: has `variant`, `size`, `isDisabled`, `label` ✓
+3. Calculates: 4 matched / 16 total Button props = **25% confidence**
+4. ✅ Detects: **Button component** (confidence: 25%)
+
+### Why This is Better
+
+| Aspect | Manual Metadata | Prop-Based Detection |
+|--------|-----------------|----------------------|
+| Setup effort | ⏱️ Manual for each component | ✅ Automatic |
+| Maintenance | 🔄 Must update on each change | ✅ Auto-updates |
+| Accuracy | Manual errors possible | ✅ Data-driven |
+| Fallback | None | Uses metadata if needed |
+| Works for new props | ❌ Requires manual update | ✅ Automatic |
+
+### When Auto-Detection Works Best
+
+✅ **Automatic Detection Succeeds When:**
+- Component uses standard, unique prop names
+- Property names match Storybook exactly (e.g., `variant=primary`)
+- Component has enough props for disambiguation
+
+⚠️ **Fallback to Manual Metadata When:**
+- Multiple components with identical prop sets
+- Generic prop names (e.g., `size`, `color` used by many components)
+- Need specific variant/story targeting
 
 ## ✍️ Description Format
 
-### Format 1: JSON (Recommended for AI Agents & MCP Tools)
+### Recommended: Optimized for Auto-Detection
 
-**Most reliable for programmatic parsing:**
+**Keep it simple—just list the component's properties:**
+
+```
+A versatile button component supporting multiple variants and sizes.
+
+Properties:
+variant=primary, size=md, onBackground=false, leadingIcon=false, trailingIcon=false, split=false, label=Button, isHovered=false, isPressed=false, isDisabled=false
+```
+
+**That's it!** The MCP tool will:
+1. Extract: `variant, size, onBackground, leadingIcon, ...`
+2. Match against installed component library
+3. Auto-detect: ✅ This is a Button
+
+**Why this format?**
+- ✅ Humans can read it easily
+- ✅ AI can parse it reliably
+- ✅ Works with existing components
+- ✅ Self-updating when props change
+
+---
+
+### Optional: Hybrid Approach (Auto-Detection + Metadata Hints)
+
+**If you want to help the detection or provide additional context:**
+
+```
+A versatile button component supporting multiple variants and sizes.
+
+Properties:
+variant=primary, size=md, onBackground=false, leadingIcon=false, trailingIcon=false, split=false, label=Button, isHovered=false, isPressed=false, isDisabled=false
+
+[Storybook] Button
+[Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--primary
+```
+
+**Metadata tags serve as hints when:**
+- Component has generic prop names
+- Multiple similar components exist
+- You want to force a specific component match
+
+---
+
+### Legacy Format 1: JSON (Not Recommended)
+
+Only use if you have custom tooling that requires JSON structure.
 
 ```json
 {
@@ -31,26 +138,11 @@ This guide shows you how to format component descriptions in your Figma library 
 }
 ```
 
-Then add your component description and properties below:
-
-```
-A versatile button component supporting multiple variants and sizes.
-
-Properties:
-variant=primary, size=md, onBackground=false
-```
-
-**Why JSON?**
-- ✅ Machine-readable and unambiguous
-- ✅ No regex parsing issues
-- ✅ Supports complex metadata (npm packages, versioning, etc.)
-- ✅ Recommended for MCP Figma tools
-
 ---
 
-### Format 2: Tags (Human-Readable Alternative)
+### Legacy Format 2: Tags (Not Recommended)
 
-**Easier to read and edit manually:**
+Only use if auto-detection fails for your components.
 
 ```
 [Storybook] Button
@@ -63,15 +155,6 @@ Brief description of what the component does.
 Properties:
 propName1=value1, propName2=value2, propName3=value3
 ```
-
-**Why Tags?**
-- ✅ Easier to read in Figma UI
-- ✅ Simple to type and remember
-- ✅ Good for manual workflows
-
----
-
-**Both formats work!** The parser supports both, so choose what works best for your team.
 
 ### How to Get Your Published URL
 
@@ -112,19 +195,9 @@ AI agents will use the exact import path you provide when generating code.
 
 ## 📝 Real Examples
 
-### Button Component (JSON Format)
+### Button Component (Recommended Format)
 
 ```
-{
-  "mcp": {
-    "source": "storybook",
-    "importPath": "./stories/Button",
-    "exportName": "Button",
-    "category": "Core/Buttons",
-    "chromaticComponentUrl": "https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral"
-  }
-}
-
 A versatile button component supporting multiple variants, sizes, and interactive states. 
 Fully accessible and themeable across all brand variants.
 
@@ -134,29 +207,27 @@ variant=primary, size=md, onBackground=false, leadingIcon=false, trailingIcon=fa
 Variants: primary, secondary, tertiary, neutral, hyperlink, underlined
 Sizes: xs, sm, md, lg
 Themes: oyo, belvilla, checkin, dancenter, motel-6, studio-6
-
-Usage:
-- Use primary for main CTAs
-- Use secondary for supporting actions
-- Use tertiary for low emphasis actions
-- Set onBackground=true when used on dark backgrounds or images
 ```
+
+**Auto-detection result:**
+- ✅ Detected as: Button
+- ✅ Confidence: ~85% (9 matching props)
+- ✅ Matched props: variant, size, onBackground, leadingIcon, trailingIcon, split, label, isHovered, isPressed, isDisabled
 
 ---
 
-### Button Component (Tag Format)
+### Button Component (With Optional Metadata)
 
 ```
-[Storybook] Button
-[Import] ./stories/Button
-[Category] Core/Buttons
-[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--neutral
-
 A versatile button component supporting multiple variants, sizes, and interactive states. 
 Fully accessible and themeable across all brand variants.
 
 Properties:
 variant=primary, size=md, onBackground=false, leadingIcon=false, trailingIcon=false, split=false, label=Button, isHovered=false, isPressed=false, isDisabled=false
+
+[Storybook] Button
+[Category] Core/Buttons
+[Published] https://www.chromatic.com/component?appId=69a68a5228ff3a182e0b99bf&csfId=components-button--primary
 
 Variants: primary, secondary, tertiary, neutral, hyperlink, underlined
 Sizes: xs, sm, md, lg
@@ -172,10 +243,6 @@ Usage:
 ### Card Component (Example)
 
 ```
-[Storybook] Card
-[Import] ./stories/Card
-[Category] Layout/Containers
-
 A flexible card container for displaying grouped content with optional header, 
 body, footer, and image support.
 
@@ -191,13 +258,15 @@ Usage:
 - Add dividers between sections for clarity
 ```
 
+**Auto-detection result:**
+- ✅ Detected as: Card
+- ✅ Confidence: ~60% (5 matching props out of 8)
+
+---
+
 ### Input Field Component (Example)
 
 ```
-[Storybook] Input
-[Import] ./stories/Input
-[Category] Forms/Controls
-
 A text input field with label, helper text, error states, and validation support.
 
 Properties:
@@ -212,32 +281,55 @@ Accessibility:
 - Keyboard navigable
 ```
 
+**Auto-detection result:**
+- ✅ Detected as: Input
+- ✅ Confidence: ~71% (5 matching props out of 7)
+
 ## 🔧 How to Apply to Your Figma Library
 
-### Step 1: Open Component Master
-1. Open your Figma file with component library
-2. Find the **master component** (has purple outline, usually on a dedicated page)
-3. **Do NOT select an instance** - instances inherit from the master
+### Minimum Setup (Prop-Based Detection)
 
-### Step 2: Edit Description
-1. Select the master component
-2. Right-click → **Edit description** (or use description panel)
-3. Paste the formatted description using the template above
-4. Save changes
+1. **Open the master component** with the purple outline
+2. **Add Properties section** to the description:
+   ```
+   Your component description here.
+   
+   Properties:
+   prop1=defaultValue1, prop2=defaultValue2, prop3=defaultValue3
+   ```
+3. **Publish** to distribute to all instances
+4. **Done!** AI agents will auto-detect your component
 
-### Step 3: Publish
-1. Click **Publish** in the assets panel
-2. Add a description of what changed (e.g., "Added Storybook metadata")
-3. All instances across all files will now inherit this description
+### Full Setup (With Optional Metadata)
 
-### Step 4: Verify
-1. Create an instance of the component in any file
-2. Check that the description is showing
-3. Test with the parsing utility (optional)
+1. **Open the master component** with the purple outline
+2. **Add full description**:
+   ```
+   Your component description here.
+   
+   Properties:
+   prop1=defaultValue1, prop2=defaultValue2
+   
+   [Storybook] ComponentName
+   [Category] Category/Subcategory
+   [Published] https://your-storybook-url
+   ```
+3. **Publish** to all instances
+4. **Verify** by creating an instance and checking the description
 
-## 🎨 Figma Best Practices
+### Step-by-Step in Figma
 
-### Property Names Must Match Exactly
+1. **Right-click** the master component → **Edit description** (or use description panel)
+2. **Paste** your formatted description
+3. **Ensure properties are listed** on one line: `variant=primary, size=md, disabled=false`
+4. **Save** changes
+5. **Click Publish** in the assets panel → Add change description → **Publish**
+
+## 🎨 Figma Best Practices for Auto-Detection
+
+### ✅ Property Names Must Match Exactly
+
+**Why?** Auto-detection relies on prop name matching.
 
 ❌ **Don't use different names:**
 ```
@@ -251,51 +343,77 @@ Figma property: variant
 Storybook prop: variant
 ```
 
-### Use Boolean Values Consistently
+### ✅ Use Boolean Values Consistently
+
+**Why?** Helps AI understand property types.
 
 ✅ **Good:**
 ```
-isDisabled=true
-isDisabled=false
+isDisabled=true, isDisabled=false
 ```
 
 ❌ **Avoid:**
 ```
-isDisabled=yes
-isDisabled=1
+isDisabled=yes, isDisabled=1
 ```
 
-### List All Possible Values
+### ✅ List All Possible Values
+
+**Why?** Helps AI understand component capabilities.
 
 ✅ **Good:**
 ```
-variant=primary, size=md, onBackground=false
+Properties:
+variant=primary, size=md, onBackground=false, leadingIcon=false
 
 Variants: primary, secondary, tertiary, neutral, hyperlink, underlined
 Sizes: xs, sm, md, lg
 ```
 
-This helps AI agents understand all available options.
+This helps AI agents understand all available options and generates better code.
 
-## 🤖 What AI Agents See
+### ✅ Use Consistent Prop Order
 
-When an AI agent uses the `mcp_figma_get_design_context` tool, they receive your component description and can:
+**Why?** Makes descriptions more scannable.
 
-### Detect Availability
+**Recommended order:**
+1. Variants/state (`variant`, `size`, `type`)
+2. Boolean flags (`isDisabled`, `isHovered`, `onBackground`)
+3. Content props (`label`, `children`, `icon`)
+4. Configuration (`theme`, `layout`, `spacing`)
+
+## 🤖 What AI Agents See & Do
+
+### Detection Flow
+
+When an AI agent encounters a Figma component with a properties list, here's what happens:
+
 ```typescript
-const componentInfo = parseComponentInfo(designContext);
+// 1. AI extracts component from Figma
+const figmaComponent = await figmaAPI.getComponent('button-frame');
 
-if (componentInfo.storybook.isAvailable) {
-  // Component exists in Storybook!
-  console.log("✅ Can use:", componentInfo.storybook.componentName);
-  console.log("Import from:", componentInfo.storybook.importPath);
-}
+// 2. AI reads description and extracts properties
+const description = figmaComponent.description;
+// "A versatile button component.
+//  Properties: variant=primary, size=md, onBackground=false, ..."
+
+// 3. MCP tool analyzes props against installed library
+import { detectComponent } from '@prism-design-global/component-library';
+const match = detectComponent(description);
+
+// 4. Automatic detection result:
+// ✅ Component: Button
+// ✅ Confidence: 85%
+// ✅ Import: @prism-design-global/component-library
+// ✅ Matched props: variant, size, onBackground
 ```
 
-### Generate Code Automatically
+### What Happens Next
+
+**If detection succeeds (confidence > threshold):**
 ```typescript
-// AI generates this automatically:
-import { Button } from './stories/Button';
+// AI generates code automatically:
+import { Button } from '@prism-design-global/component-library';
 
 export default function MyPage() {
   return (
@@ -307,6 +425,32 @@ export default function MyPage() {
     />
   );
 }
+```
+
+**If detection is uncertain or fails:**
+```typescript
+// AI may ask for clarification or fall back to manual metadata
+const metadata = parseMetadataTags(description);
+if (metadata.storybook === 'Button') {
+  // Confirmed by [Storybook] tag
+}
+```
+
+### Analyzing Detection Results
+
+Developers can debug detection using the component registry:
+
+```typescript
+import { analyzeProps } from '@prism-design-global/component-library';
+
+const analysis = analyzeProps(['variant', 'size', 'isDisabled', 'label']);
+console.log(analysis);
+// {
+//   totalProps: 4,
+//   topMatch: { name: 'Button', confidence: 0.85, ... },
+//   allMatches: [{ Button: 0.85 }, { Input: 0.25 }, ...],
+//   suggestedThreshold: 0.68
+// }
 ```
 
 ## 📊 Component Coverage Checklist
@@ -330,44 +474,123 @@ Track which components have Storybook metadata:
 
 ## ❓ FAQ
 
+### Q: How does prop-based detection work?
+**A:** The MCP tool extracts property names from your Figma description, then matches them against the installed `@prism-design-global/component-library`. It calculates a confidence score based on how many props match. Components with higher match percentages are detected with higher confidence.
+
+### Q: What if detection gets it wrong?
+**A:** Add metadata tags to the description:
+```
+Properties:
+prop1=value, prop2=value
+
+[Storybook] ComponentName
+[Category] Category/Subcategory
+```
+The metadata tags act as hints/overrides when auto-detection is uncertain.
+
+### Q: How high does the confidence need to be?
+**A:** Default threshold is **50%** (50% of component's props must match). For a Button with 10 props, 5 matching props = 50% confidence = ✅ Detected.
+
+You can check confidence levels with:
+```typescript
+import { analyzeProps } from '@prism-design-global/component-library';
+analyzeProps(['variant', 'size', 'isDisabled']);
+```
+
+### Q: What if I have multiple components with the same props?
+**A:** Use metadata tags to disambiguate:
+```
+Properties:
+variant=primary, size=md
+
+[Storybook] Button
+[Category] Core/Buttons
+```
+
 ### Q: Do I need to add metadata to every instance?
 **A:** No! Only add it to the **master component**. All instances automatically inherit the description.
 
-### Q: What if I have component variants in Figma?
-**A:** Add the metadata to the main component set. Instances can override properties in their description if needed.
-
-### Q: Can I change the metadata format?
-**A:** The parser is flexible, but stick to the `[Tag] Value` format for consistency. The tags `[Storybook]`, `[Import]`, and `[Category]` are recognized by the parser.
-
 ### Q: What if my component isn't in Storybook yet?
-**A:** Don't add the `[Storybook]` tag. When it's ready, update the description and publish the library.
+**A:** The Properties section will still help developers understand the component. Once added to Storybook, just update the description with `[Storybook] ComponentName` and republish.
 
-### Q: Do node IDs matter anymore?
-**A:** No! The metadata-based approach doesn't rely on node IDs, which makes it work reliably for all instances.
-
-### Q: How do I test if the parser works?
-**A:** Use the utility in your codebase:
+### Q: How do I debug detection?
+**A:** Use the registry analysis tool:
 ```typescript
-import { parseComponentInfo } from './utils/figmaStorybook';
+import { analyzeProps } from '@prism-design-global/component-library';
 
-const testDescription = `
-[Storybook] Button
-[Import] ./stories/Button
-variant=primary, size=md
-`;
-
-console.log(parseComponentInfo(testDescription));
+const result = analyzeProps(['variant', 'size', 'isDisabled', 'label']);
+console.log(result);
+// Shows all possible matches and confidence scores
 ```
+
+### Q: Can I use custom property names?
+**A:** Not recommended. Auto-detection relies on exact prop name matching. If you must use custom names, add metadata tags to help the detection process.
+
+### Q: What about component variants in Figma?
+**A:** Add metadata to the main component set. Main component + variants all inherit the same description:
+```
+Properties:
+variant=primary, size=md
+
+[Storybook] Button
+```
+
+### Q: Does auto-detection work offline?
+**A:** Yes! It reads from the installed `@prism-design-global/component-library` package, which is part of your project dependencies. No network calls needed.
 
 ## 🔗 Related Documentation
 
+- [componentRegistry.ts](./src/utils/componentRegistry.ts) - Prop-based detection utility
 - [FIGMA_STORYBOOK_MAPPING.md](./FIGMA_STORYBOOK_MAPPING.md) - Complete mapping reference
-- [figmaStorybook.ts](./src/utils/figmaStorybook.ts) - Parser utility source code
 - [Button.stories.tsx](./src/stories/Button.stories.tsx) - Example Storybook implementation
+
+### Using the Component Registry
+
+```typescript
+// Build the component registry
+import { buildComponentRegistry, detectComponent, analyzeProps } from '@prism-design-global/component-library';
+
+// Detect component from Figma description
+const description = `A button component.
+Properties: variant=primary, size=md, isDisabled=false`;
+
+const match = detectComponent(description);
+if (match) {
+  console.log(`✅ Detected: ${match.name} (${(match.confidence * 100).toFixed(0)}%)`);
+}
+
+// Analyze props for debugging
+const analysis = analyzeProps(['variant', 'size', 'isDisabled', 'label']);
+console.log('All matches:', analysis.allMatches);
+console.log('Top match:', analysis.topMatch);
+```
 
 ## 📞 Support
 
 If you have questions about:
-- **Figma setup**: Contact the design systems team
+- **Figma setup**: Check the "How to Apply" section above
+- **Prop-based detection**: See the Component Registry usage examples
 - **Storybook props**: Check component documentation in Storybook
-- **Parser issues**: Open an issue in the repository
+- **Detection not working**: Use `analyzeProps()` to debug confidence scores
+- **Detection issues**: Open an issue in the repository
+
+## 🚀 Quick Start Summary
+
+### Minimum Setup (⏱️ 2 minutes)
+1. Open your Button component in Figma (master component)
+2. Edit description:
+   ```
+   A versatile button component.
+   
+   Properties:
+   variant=primary, size=md, onBackground=false, isDisabled=false, label=Button
+   ```
+3. Publish
+4. ✅ Done! Auto-detection now works
+
+### Full Setup (⏱️ 5 minutes) 
+1. Add Properties section (same as above)
+2. Add optional metadata tags for disambiguation
+3. List all variants/sizes/themes available
+4. Publish
+5. ✅ Done! Auto-detection + better documentation
