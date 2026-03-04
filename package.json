@@ -30,6 +30,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "npx chromatic --project-token=chpt_3869a61802ea639",
+    "release": "semantic-release",
     "prepublishOnly": "npm run build:lib"
   },
   "peerDependencies": {
@@ -39,6 +40,10 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",
     "@eslint/js": "^9.39.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
     "@storybook/addon-a11y": "^10.2.15",
     "@storybook/addon-docs": "^10.2.15",
     "@storybook/addon-onboarding": "^10.2.15",
@@ -48,12 +53,14 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "chromatic": "^15.2.0",
+    "conventional-changelog-conventionalcommits": "^9.2.0",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-storybook": "^10.2.15",
     "globals": "^16.5.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "semantic-release": "^25.0.3",
     "storybook": "^10.2.15",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",
