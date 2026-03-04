@@ -1,6 +1,44 @@
-# Component Library
+# @prism-design-global/component-library
 
 A design system component library with **seamless Figma to Storybook integration**, enabling AI agents to automatically detect and use components from your design files.
+
+## 📦 Installation
+
+```bash
+npm install @prism-design-global/component-library
+```
+
+## 🔨 Usage
+
+```tsx
+import { Button } from '@prism-design-global/component-library';
+
+function App() {
+  return (
+    <Button
+      variant="primary"
+      size="md"
+      theme="oyo"
+      label="Click me"
+    />
+  );
+}
+```
+
+### Available exports
+
+```ts
+import { Button } from '@prism-design-global/component-library';
+import type { ThemeName, ButtonVariant, ButtonSize } from '@prism-design-global/component-library';
+```
+
+### Peer dependencies
+
+This package requires React 18+ in your project:
+
+```bash
+npm install react react-dom
+```
 
 ## ✨ Features
 
@@ -25,16 +63,16 @@ npm run storybook
 npm run dev
 ```
 
-### Using Components
+### Local Development
 
 ```tsx
-import { Button } from './stories/Button';
+import { Button } from '@prism-design-global/component-library';
 
 function App() {
   return (
-    <Button 
-      variant="primary" 
-      size="md" 
+    <Button
+      variant="primary"
+      size="md"
       label="Click me"
     />
   );
@@ -96,16 +134,17 @@ See **[FIGMA_STORYBOOK_MAPPING.md](./FIGMA_STORYBOOK_MAPPING.md)** for complete 
 ```
 component-library/
 ├── src/
-│   ├── stories/          # Storybook components
-│   │   ├── Button.tsx
-│   │   └── Button.stories.tsx
-│   └── utils/
-│       └── figmaStorybook.ts  # Figma-Storybook parser
-├── tokens/              # Design tokens
+│   ├── index.ts                  # Package entry point
+│   ├── components/               # Library components
+│   │   └── Button.tsx
+│   └── stories/                  # Storybook stories
+│       └── Button.stories.tsx
+├── tokens/                       # Design tokens (also included in npm package)
 │   ├── colours/
 │   ├── density/
 │   ├── dimension/
 │   └── theme/
+├── dist/                         # Built library output (auto-generated)
 ├── FIGMA_STORYBOOK_MAPPING.md    # Component mapping reference
 ├── FIGMA_DESCRIPTION_GUIDE.md    # Figma setup guide
 └── README.md
@@ -138,12 +177,24 @@ This project uses:
 ### Scripts
 
 ```bash
-npm run dev          # Start Vite dev server
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run storybook    # Start Storybook dev server
+npm run dev              # Start Vite dev server
+npm run build            # Build for production
+npm run build:lib        # Build the npm library (ESM + CJS + types)
+npm run preview          # Preview production build
+npm run storybook        # Start Storybook dev server
 npm run build-storybook  # Build Storybook for deployment
 ```
+
+### Publishing a new version
+
+1. Bump `version` in `package.json`
+2. Commit and push to `main`
+3. Tag and push:
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
+GitHub Actions will automatically build and publish to npm.
 
 ## 📖 Documentation
 
@@ -161,5 +212,5 @@ npm run build-storybook  # Build Storybook for deployment
 
 ## 📜 License
 
-This project is part of a design system initiative.
+MIT
 
