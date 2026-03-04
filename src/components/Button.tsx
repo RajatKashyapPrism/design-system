@@ -1,7 +1,7 @@
 // Button component using Figma tokens
 // Based on Figma design: Parent Design System - Button component
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Import all theme tokens
 import oyoTokens from '../../tokens/theme/oyo.tokens.json';
