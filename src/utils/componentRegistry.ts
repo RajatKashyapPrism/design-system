@@ -54,8 +54,6 @@ export function buildComponentRegistry(): Map<string, ComponentMetadata> {
     propNames: new Set([
       'children',
       'isDisabled',
-      'isHovered',
-      'isPressed',
       'label',
       'label1',
       'leadingIcon',
@@ -63,7 +61,6 @@ export function buildComponentRegistry(): Map<string, ComponentMetadata> {
       'onBackground',
       'size',
       'split',
-      'theme',
       'trailingIcon',
       'trailingIcon1',
       'variant',
@@ -72,8 +69,6 @@ export function buildComponentRegistry(): Map<string, ComponentMetadata> {
     propTypes: {
       children: 'React.ReactNode',
       isDisabled: 'boolean',
-      isHovered: 'boolean',
-      isPressed: 'boolean',
       label: 'string',
       label1: 'boolean',
       leadingIcon: 'boolean',
@@ -81,7 +76,6 @@ export function buildComponentRegistry(): Map<string, ComponentMetadata> {
       onBackground: 'boolean',
       size: 'ButtonSize',
       split: 'boolean',
-      theme: 'ThemeName',
       trailingIcon: 'boolean',
       trailingIcon1: 'React.ReactNode | null',
       variant: 'ButtonVariant',
@@ -89,16 +83,13 @@ export function buildComponentRegistry(): Map<string, ComponentMetadata> {
     },
     defaultProps: {
       isDisabled: false,
-      isHovered: false,
-      isPressed: false,
       label: 'Button',
       label1: true,
       leadingIcon: false,
       leadingIcon1: null,
       onBackground: false,
-      size: 'md',
+      size: 'xs',
       split: false,
-      theme: 'oyo',
       trailingIcon: false,
       trailingIcon1: null,
       variant: 'primary',
@@ -308,13 +299,3 @@ export function formatComponentMatch(match: ComponentMatch): string {
 
 // Export singleton registry for convenience
 export const defaultRegistry = buildComponentRegistry();
-
-export default {
-  buildComponentRegistry,
-  detectComponentsByProps,
-  detectComponent,
-  analyzeProps,
-  generateFigmaDescription,
-  formatComponentMatch,
-  extractFigmaProps,
-};

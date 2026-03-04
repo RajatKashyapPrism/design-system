@@ -1,0 +1,26 @@
+@import url('dimension.css');
+
+:root {
+	--fixed-md-1: var(--fixed-300);
+	--fixed-md-2: var(--fixed-400);
+	--fixed-md-3: var(--fixed-500);
+	--fixed-md-4: var(--fixed-600);
+	--fixed-sm-1: var(--fixed-25);
+	--fixed-sm-2: var(--fixed-50);
+	--fixed-sm-3: var(--fixed-100);
+	--fixed-sm-4: var(--fixed-150);
+	--fixed-sm-5: var(--fixed-200);
+	--scale-lg-1: var(--scale-800);
+	--scale-lg-2: var(--scale-900);
+	--scale-lg-3: var(--scale-1000);
+	--scale-lg-4: var(--scale-1100);
+	--scale-lg-5: var(--scale-1200);
+	--scale-md-1: var(--scale-300);
+	--scale-md-2: var(--scale-400);
+	--scale-md-3: var(--scale-500);
+	--scale-md-4: var(--scale-600);
+	--scale-md-5: var(--scale-700);
+	--scale-sm-3: var(--scale-100);
+	--scale-sm-4: var(--scale-150);
+	--scale-sm-5: var(--scale-200);
+}

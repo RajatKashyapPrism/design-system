@@ -1,0 +1,18 @@
+/**
+ * Design Tokens — default entry point (OYO brand).
+ *
+ * Each brand's theme.css already imports its own colours, dimensions, and density.
+ * Replace the theme import below with your brand's theme.css for other brands.
+ *
+ * Brands available:
+ *   ./desktop/oyo/theme.css
+ *   ./desktop/belvilla/theme.css
+ *   ./desktop/checkin/theme.css
+ *   ./desktop/dancenter/theme.css
+ *   ./desktop/motel 6/theme.css
+ *   ./desktop/studio 6/theme.css
+ */
+@import './desktop/oyo/theme.css';
+
+/* Mobile: --scale-* tokens use smaller values on narrow viewports */
+@import './mobile/responsive.css';

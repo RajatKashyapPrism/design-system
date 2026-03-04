@@ -15,16 +15,17 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.cjs.js"
-    }
+    },
+    "./tokens": "./src/tokens/index.css",
+    "./tokens/*": "./src/tokens/*"
   },
   "files": [
     "dist",
-    "tokens",
+    "src/tokens",
     "README.md"
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsc -b && vite build --config vite.lib.config.ts",
     "build:lib": "vite build --config vite.lib.config.ts && tsc --project tsconfig.lib.json",
     "lint": "eslint .",
     "storybook": "storybook dev -p 6006",
@@ -35,7 +36,8 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "react-aria": ">=3.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",
@@ -78,5 +80,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/RajatKashyapPrism/design-system.git"
+  },
+  "dependencies": {
+    "react-aria": "^3.46.0"
   }
 }

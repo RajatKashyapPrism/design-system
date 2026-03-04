@@ -1,0 +1,28 @@
+:root {
+	--fixed-100: 8px;
+	--fixed-150: 12px;
+	--fixed-200: 16px;
+	--fixed-25: 2px;
+	--fixed-300: 24px;
+	--fixed-400: 32px;
+	--fixed-50: 4px;
+	--fixed-500: 40px;
+	--fixed-600: 48px;
+	--scale-100: 12px;
+	--scale-1000: 88px;
+	--scale-1100: 96px;
+	--scale-1200: 112px;
+	--scale-1400: 128px;
+	--scale-150: 16px;
+	--scale-1600: 144px;
+	--scale-200: 24px;
+	--scale-25: 4px;
+	--scale-300: 32px;
+	--scale-400: 40px;
+	--scale-50: 8px;
+	--scale-500: 48px;
+	--scale-600: 56px;
+	--scale-700: 64px;
+	--scale-800: 72px;
+	--scale-900: 80px;
+}
