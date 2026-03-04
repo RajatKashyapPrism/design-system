@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { Button } from './Button';
+import { Button } from '../components/Button';
 
 // Wrapper component that manages interaction states internally
 function InteractiveButton(props: React.ComponentProps<typeof Button>) {
