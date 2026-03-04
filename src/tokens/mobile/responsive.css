@@ -1,0 +1,26 @@
+/**
+ * Mobile responsive dimension overrides.
+ * --scale-* tokens use smaller values on narrow viewports.
+ * Fixed tokens (--fixed-*) are viewport-independent and not overridden.
+ */
+@media (max-width: 768px) {
+  :root {
+    --scale-100: 8px;
+    --scale-1000: 80px;
+    --scale-1100: 88px;
+    --scale-1200: 96px;
+    --scale-1400: 112px;
+    --scale-150: 12px;
+    --scale-1600: 128px;
+    --scale-200: 16px;
+    --scale-25: 2px;
+    --scale-300: 24px;
+    --scale-400: 32px;
+    --scale-50: 4px;
+    --scale-500: 40px;
+    --scale-600: 48px;
+    --scale-700: 56px;
+    --scale-800: 64px;
+    --scale-900: 72px;
+  }
+}

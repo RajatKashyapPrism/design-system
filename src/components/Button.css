@@ -1,0 +1,147 @@
+/*
+ * Button Component Styles
+ *
+ * Consumes CSS custom properties from src/tokens/ (uploaded directly from Figma).
+ * Token CSS is global (:root) — brand theme is determined by which theme.css the
+ * app imports (one brand per project). No [data-brand] selector scoping.
+ * Responsive spacing: --scale-* tokens are overridden in src/tokens/mobile/responsive.css
+ * via @media (max-width: 768px). Fixed tokens (--fixed-*) never change.
+ *
+ * Component-level CSS variables (set inline by Button.tsx based on variant/state):
+ *   --btn-bg            Background color
+ *   --btn-color         Text color
+ *   --btn-border-shadow Box-shadow used as border (tertiary variant)
+ *
+ * Size modifier CSS variables (set by .btn--{size} classes below):
+ *   --btn-padding-y         Vertical padding
+ *   --btn-padding-x         Horizontal padding
+ *   --btn-label-padding-x   Inner label span horizontal padding
+ *   --btn-gap               Gap between icon and label
+ *   --btn-min-width         Minimum width
+ *   --btn-font-size         Font size
+ *   --btn-icon-size         Icon size
+ *   --btn-border-radius     Border radius
+ */
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+
+.btn {
+  /* Defaults (overridden by variant JS + size modifier classes) */
+  --btn-bg: transparent;
+  --btn-color: inherit;
+  --btn-border-shadow: none;
+  --btn-font-weight: var(--font-weight-medium, 600);
+  --btn-text-decoration: none;
+  --btn-text-decoration-style: solid;
+
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--btn-padding-y, 0px) var(--btn-padding-x, 4px);
+  min-width: var(--btn-min-width, 48px);
+  gap: var(--btn-gap, 0px);
+
+  /* Colors (driven by JS-set component variables) */
+  background-color: var(--btn-bg);
+  color: var(--btn-color);
+  border: none;
+  box-shadow: var(--btn-border-shadow);
+  border-radius: var(--btn-border-radius, 8px);
+
+  /* Typography (from src/tokens desktop theme) */
+  font-family: var(--font-family-body, Inter), sans-serif;
+  font-size: var(--btn-font-size, var(--font-size-button-2, 14px));
+  font-weight: var(--btn-font-weight);
+  line-height: var(--font-line-height-button, 24px);
+  letter-spacing: var(--font-letter-spacing-button, 0px);
+  text-decoration: var(--btn-text-decoration);
+  text-decoration-style: var(--btn-text-decoration-style);
+
+  /* Interaction */
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus ring — shown only for keyboard navigation (React Aria sets data-focus-visible) */
+.btn[data-focus-visible] {
+  outline: 2px solid var(--colour-border-intense-brand-primary, currentColor);
+  outline-offset: 2px;
+}
+
+/* ── Size variants ────────────────────────────────────────────────────────── */
+/* --scale-* tokens shrink on mobile via src/tokens/mobile/responsive.css.     */
+/* --fixed-* tokens are viewport-independent.                                  */
+
+.btn--xs {
+  --btn-padding-y: 0px;
+  --btn-padding-x: var(--fixed-50, 4px);
+  --btn-label-padding-x: var(--fixed-50, 4px);
+  --btn-gap: 0px;
+  --btn-font-size: var(--font-size-button-2, 14px);
+  --btn-icon-size: var(--fixed-200, 16px);
+  --btn-min-width: 48px;
+  --btn-border-radius: var(--button-size-border-radius-xs, 8px);
+}
+
+.btn--sm {
+  --btn-padding-y: var(--scale-50, 8px);
+  --btn-padding-x: var(--scale-100, 12px);
+  --btn-label-padding-x: var(--fixed-50, 4px);
+  --btn-gap: var(--fixed-50, 4px);
+  --btn-font-size: var(--font-size-button-2, 14px);
+  --btn-icon-size: var(--fixed-200, 16px);
+  --btn-min-width: 80px;
+  --btn-border-radius: var(--button-size-border-radius-sm, 8px);
+}
+
+.btn--md {
+  --btn-padding-y: var(--scale-100, 12px);
+  --btn-padding-x: var(--scale-300, 32px);
+  --btn-label-padding-x: var(--fixed-50, 4px);
+  --btn-gap: var(--fixed-100, 8px);
+  --btn-font-size: var(--font-size-button-2, 14px);
+  --btn-icon-size: var(--fixed-200, 16px);
+  --btn-min-width: 72px;
+  --btn-border-radius: var(--button-size-border-radius-sm, 8px);
+}
+
+.btn--lg {
+  --btn-padding-y: var(--scale-150, 16px);
+  --btn-padding-x: var(--scale-400, 40px);
+  --btn-label-padding-x: var(--fixed-50, 4px);
+  --btn-gap: var(--fixed-100, 8px);
+  --btn-font-size: var(--font-size-button-1, 16px);
+  --btn-icon-size: var(--fixed-300, 24px);
+  --btn-min-width: 72px;
+  --btn-border-radius: var(--button-size-border-radius-lg, 12px);
+}
+
+/* ── Minimal variants (hyperlink, underlined) ─────────────────────────────── */
+
+.btn--hyperlink,
+.btn--underlined {
+  --btn-padding-y: 2px;
+  --btn-padding-x: 8px;
+  --btn-label-padding-x: 0px;
+  --btn-gap: 8px;
+  --btn-min-width: auto;
+  --btn-font-weight: var(--font-weight-regular, 400);
+  --btn-border-radius: 8px;
+}
+
+.btn--underlined {
+  --btn-text-decoration: underline;
+  --btn-text-decoration-style: dotted;
+}
+
+.btn--hyperlink[data-hovered],
+.btn--hyperlink[data-pressed] {
+  --btn-text-decoration: underline;
+}

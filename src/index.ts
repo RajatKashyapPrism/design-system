@@ -1,5 +1,5 @@
 export { Button } from './components/Button';
-export type { ThemeName, ButtonVariant, ButtonSize } from './components/Button';
+export type { ButtonVariant, ButtonSize } from './components/Button';
 
 // Component Registry & Prop-Based Detection
 export {
