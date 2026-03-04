@@ -69,21 +69,19 @@ Token files are included in the package under `tokens/`:
 
 ```bash
 npm install
-npm run dev
+npm run build:lib
 npm run storybook
 ```
 
 ## Scripts
 
 ```bash
-npm run dev              # Start Vite dev server
-npm run build            # Build app bundle
-npm run build:lib        # Build library (ESM + CJS + d.ts)
-npm run preview          # Preview app build
-npm run lint             # Run ESLint
-npm run storybook        # Start Storybook
-npm run build-storybook  # Build Storybook static output
-npm run chromatic        # Publish Storybook to Chromatic
+npm run build              # Build library and types
+npm run build:lib          # Build library (ESM + CJS + d.ts)
+npm run lint               # Run ESLint
+npm run storybook         # Start Storybook dev server
+npm run build-storybook   # Build Storybook static output
+npm run chromatic         # Publish Storybook to Chromatic
 ```
 
 ## Project Structure
@@ -91,14 +89,13 @@ npm run chromatic        # Publish Storybook to Chromatic
 ```text
 component-library/
 +-- src/
-¦   +-- index.ts
-¦   +-- components/
-¦   ¦   +-- Button.tsx
-¦   +-- stories/
-¦   ¦   +-- Button.stories.tsx
-¦   ¦   +-- Configure.mdx
-¦   +-- utils/
-+-- tokens/
+ï¿½   +-- index.ts
+ï¿½   +-- components/
+ï¿½   ï¿½   +-- Button.tsx
+ï¿½   +-- stories/
+ï¿½   ï¿½   +-- Button.stories.tsx
+ï¿½   ï¿½   +-- Configure.mdx
+ï¿½   +-- utils/â”‚       +-- componentRegistry.ts+-- tokens/
 +-- .storybook/
 +-- dist/
 +-- FIGMA_DESCRIPTION_GUIDE.md
