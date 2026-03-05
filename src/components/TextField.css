@@ -1,0 +1,151 @@
+/*
+ * TextField Component Styles
+ *
+ * Outlined floating-label text input.
+ * Uses CSS custom properties from src/tokens/ (:root).
+ *
+ * Floating label technique: input has placeholder=" " (a space).
+ * CSS :not(:placeholder-shown) detects when a value is present.
+ * Label sibling selector (~) floats the label up when focused or filled.
+ *
+ * Component-level CSS variables set by size/state modifier classes:
+ *   --tf-border-color   Current border color (default / focus / error)
+ *   --tf-label-color    Current label color
+ */
+
+/* ── Wrapper ──────────────────────────────────────────────────────────────── */
+
+.text-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--fixed-100, 4px);
+  min-width: 240px;
+  font-family: var(--font-family-body, Inter), sans-serif;
+}
+
+/* ── Input wrapper (holds positioned label) ───────────────────────────────── */
+
+.text-field__wrapper {
+  position: relative;
+}
+
+/* ── Native input ─────────────────────────────────────────────────────────── */
+
+.text-field__input {
+  width: 100%;
+  box-sizing: border-box;
+
+  /* Top padding leaves room for the floated label */
+  padding: var(--fixed-150, 12px) var(--scale-100, 12px) var(--fixed-150, 12px);
+
+  background: var(--colour-background-subtle-neutral-1, #fff);
+  border: 1px solid var(--colour-border-subtle-neutral, #d0d5dd);
+  border-radius: var(--button-size-border-radius-sm, 8px);
+
+  font-family: inherit;
+  font-size: var(--font-size-subtitle-2, 14px);
+  line-height: var(--font-line-height-subtitle-2, 22px);
+  color: var(--colour-text-intense-neutral);
+
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Focused: brand border + inset shadow to simulate 2px without shifting layout */
+.text-field__input:focus {
+  border-color: var(--colour-border-intense-brand-secondary);
+  box-shadow: inset 0 0 0 1px var(--colour-border-intense-brand-secondary);
+}
+
+/* Keyboard focus ring */
+.text-field__input[data-focus-visible] {
+  outline: var(--fixed-25, 2px) solid var(--colour-border-intense-brand-secondary, currentColor);
+  outline-offset: var(--fixed-25, 2px);
+}
+
+/* Disabled */
+.text-field__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--colour-background-subtle-neutral-2, #f9fafb);
+}
+
+/* ── Floating label ───────────────────────────────────────────────────────── */
+
+.text-field__label {
+  position: absolute;
+  /* Offset by inner padding */
+  left: var(--scale-100, 12px);
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-family: inherit;
+  font-size: var(--font-size-subtitle-2, 14px);
+  line-height: 1;
+  color: var(--colour-text-moderate-neutral);
+
+  /* Prevent label from intercepting clicks */
+  pointer-events: none;
+
+  /* Background clips the border line behind the floated label */
+  padding: 0 var(--fixed-50, 4px);
+  background: transparent;
+
+  transition: top 0.15s ease, font-size 0.15s ease, color 0.15s ease,
+    background-color 0.1s ease;
+}
+
+/* Float state: focused OR has a value */
+.text-field__input:focus ~ .text-field__label,
+.text-field__input:not(:placeholder-shown) ~ .text-field__label {
+  top: 0;
+  font-size: var(--font-size-caption, 12px);
+  background: var(--colour-background-subtle-neutral-1, #fff);
+  color: var(--colour-text-moderate-neutral);
+}
+
+/* Brand colour on label when focused */
+.text-field__input:focus ~ .text-field__label {
+  color: var(--colour-text-intense-brand-secondary);
+}
+
+/* Required asterisk */
+.text-field__input[aria-required="true"] ~ .text-field__label::after {
+  content: ' *';
+  color: var(--colour-text-intense-negative);
+}
+
+/* Dim label when disabled */
+.text-field__input:disabled ~ .text-field__label {
+  opacity: 0.5;
+}
+
+/* ── Error state ──────────────────────────────────────────────────────────── */
+
+.text-field[data-invalid] .text-field__input {
+  border-color: var(--colour-border-intense-negative);
+  box-shadow: none;
+}
+
+.text-field[data-invalid] .text-field__input:focus {
+  border-color: var(--colour-border-intense-negative);
+  box-shadow: inset 0 0 0 1px var(--colour-border-intense-negative);
+}
+
+.text-field[data-invalid] .text-field__input:focus ~ .text-field__label {
+  color: var(--colour-text-intense-negative);
+}
+
+/* ── Helper / error message ───────────────────────────────────────────────── */
+
+.text-field__description {
+  font-size: var(--font-size-caption, 12px);
+  color: var(--colour-text-moderate-neutral);
+  padding-left: var(--scale-100, 12px);
+}
+
+.text-field__error {
+  font-size: var(--font-size-caption, 12px);
+  color: var(--colour-text-intense-negative);
+  padding-left: var(--scale-100, 12px);
+}
