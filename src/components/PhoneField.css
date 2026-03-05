@@ -1,0 +1,184 @@
+/*
+ * PhoneField Component Styles
+ *
+ * Composite outlined input: country code <select> + phone <input type="tel">.
+ * Label is always pinned at the top border (no float animation) because the
+ * country select always displays a visible value.
+ *
+ * Focus state on the outer wrapper is driven by CSS :focus-within so either
+ * child (select or input) being focused activates the brand border.
+ */
+
+/* ── Root ─────────────────────────────────────────────────────────────────── */
+
+.phone-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--fixed-100, 8px);
+  min-width: 240px;
+  font-family: var(--font-family-body, Inter), sans-serif;
+}
+
+/* ── Wrapper — single outlined box ───────────────────────────────────────── */
+
+.phone-field__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  background: var(--colour-background-subtle-neutral-1, #fff);
+  border: 1px solid var(--colour-border-subtle-neutral, #d0d5dd);
+  border-radius: var(--button-size-border-radius-sm, 8px);
+
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Focused: any child focused activates brand border */
+.phone-field__wrapper:focus-within {
+  border-color: var(--colour-border-intense-brand-secondary);
+  box-shadow: inset 0 0 0 1px var(--colour-border-intense-brand-secondary);
+}
+
+/* ── Floating label — always pinned at top ────────────────────────────────── */
+
+.phone-field__label {
+  position: absolute;
+  left: var(--scale-100, 12px);
+  top: 0;
+  transform: translateY(-50%);
+
+  font-family: inherit;
+  font-size: var(--font-size-caption, 12px);
+  line-height: 1;
+  color: var(--colour-text-moderate-neutral);
+
+  pointer-events: none;
+  padding: 0 var(--fixed-50, 4px);
+  background: var(--colour-background-subtle-neutral-1, #fff);
+}
+
+/* Brand colour on label when any child is focused */
+.phone-field__wrapper:focus-within ~ * .phone-field__label,
+.phone-field__wrapper:focus-within .phone-field__label {
+  color: var(--colour-text-intense-brand-secondary);
+}
+
+/* ── Country selector ─────────────────────────────────────────────────────── */
+
+.phone-field__country-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.phone-field__country {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  /* Right padding leaves room for the chevron */
+  padding: var(--fixed-150, 12px) calc(var(--fixed-100, 8px) + 16px) var(--fixed-150, 12px) var(--scale-100, 12px);
+
+  font-family: inherit;
+  font-size: var(--font-size-subtitle-2, 14px);
+  color: var(--colour-text-intense-neutral);
+
+  max-width: 112px;
+}
+
+.phone-field__country:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.phone-field__country-chevron {
+  position: absolute;
+  right: var(--fixed-100, 8px);
+  pointer-events: none;
+  color: var(--colour-text-moderate-neutral);
+  transition: transform 0.2s ease;
+}
+
+.phone-field__country-wrapper[data-open] .phone-field__country-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Divider ──────────────────────────────────────────────────────────────── */
+
+.phone-field__divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--colour-border-subtle-neutral, #d0d5dd);
+  flex-shrink: 0;
+  margin: var(--fixed-100, 8px) 0;
+}
+
+/* ── Phone number input ───────────────────────────────────────────────────── */
+
+.phone-field__input {
+  flex: 1;
+  min-width: 0;
+
+  padding: var(--fixed-150, 12px) var(--scale-100, 12px);
+
+  background: transparent;
+  border: none;
+  outline: none;
+
+  font-family: inherit;
+  font-size: var(--font-size-subtitle-2, 14px);
+  line-height: var(--font-line-height-subtitle-2, 22px);
+  color: var(--colour-text-intense-neutral);
+}
+
+.phone-field__input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Keyboard focus ring on the number input only */
+.phone-field__input[data-focus-visible] {
+  outline: var(--fixed-25, 2px) solid var(--colour-border-intense-brand-secondary, currentColor);
+  outline-offset: var(--fixed-25, 2px);
+  border-radius: 0 var(--button-size-border-radius-sm, 8px) var(--button-size-border-radius-sm, 8px) 0;
+}
+
+/* ── Error state ──────────────────────────────────────────────────────────── */
+
+.phone-field[data-invalid] .phone-field__wrapper {
+  border-color: var(--colour-border-intense-negative);
+}
+
+.phone-field[data-invalid] .phone-field__wrapper:focus-within {
+  border-color: var(--colour-border-intense-negative);
+  box-shadow: inset 0 0 0 1px var(--colour-border-intense-negative);
+}
+
+.phone-field[data-invalid] .phone-field__wrapper:focus-within .phone-field__label {
+  color: var(--colour-text-intense-negative);
+}
+
+/* ── Helper / error message ───────────────────────────────────────────────── */
+
+.phone-field__description {
+  font-size: var(--font-size-caption, 12px);
+  color: var(--colour-text-moderate-neutral);
+  padding-left: var(--scale-100, 12px);
+}
+
+.phone-field__error {
+  font-size: var(--font-size-caption, 12px);
+  color: var(--colour-text-intense-negative);
+  padding-left: var(--scale-100, 12px);
+}
+
+/* ── Disabled state ───────────────────────────────────────────────────────── */
+
+.phone-field[aria-disabled='true'] .phone-field__wrapper {
+  opacity: 0.5;
+  background: var(--colour-background-subtle-neutral-2, #f9fafb);
+}
