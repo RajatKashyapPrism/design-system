@@ -1,6 +1,6 @@
 {
   "name": "@prism-design-global/component-library",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Spectrum design system component library with multi-brand theming",
   "private": false,
   "publishConfig": {

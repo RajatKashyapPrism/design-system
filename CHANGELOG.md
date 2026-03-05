@@ -1,3 +1,10 @@
+## [0.2.0](https://github.com/RajatKashyapPrism/design-system/compare/v0.1.2...v0.2.0) (2026-03-05)
+
+### Features
+
+* add PhoneField component ([ddb7146](https://github.com/RajatKashyapPrism/design-system/commit/ddb7146cc912ecb7e15521d9418d48ef53110e22))
+* add TextField component ([3c30fbd](https://github.com/RajatKashyapPrism/design-system/commit/3c30fbd5a1012b420f81c32d52c87487c490dc8d))
+
 ## [0.1.2](https://github.com/RajatKashyapPrism/design-system/compare/v0.1.1...v0.1.2) (2026-03-04)
 
 ### Bug Fixes
