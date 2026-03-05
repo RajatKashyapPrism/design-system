@@ -36,8 +36,8 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "react-aria": ">=3.0.0"
+    "react-aria": ">=3.0.0",
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",
@@ -82,6 +82,6 @@
     "url": "https://github.com/RajatKashyapPrism/design-system.git"
   },
   "dependencies": {
-    "react-aria": "^3.46.0"
+    "react-aria": ">=3.0.0"
   }
 }
