@@ -65,9 +65,14 @@
 
 /* ── Country selector ─────────────────────────────────────────────────────── */
 
-.phone-field__country {
+.phone-field__country-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
+}
 
+.phone-field__country {
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
@@ -75,19 +80,31 @@
   outline: none;
   cursor: pointer;
 
-  padding: var(--fixed-150, 12px) var(--fixed-100, 8px) var(--fixed-150, 12px) var(--scale-100, 12px);
+  /* Right padding leaves room for the chevron */
+  padding: var(--fixed-150, 12px) calc(var(--fixed-100, 8px) + 16px) var(--fixed-150, 12px) var(--scale-100, 12px);
 
   font-family: inherit;
   font-size: var(--font-size-subtitle-2, 14px);
   color: var(--colour-text-intense-neutral);
 
-  /* Prevent select from stretching the layout */
-  max-width: 96px;
+  max-width: 112px;
 }
 
 .phone-field__country:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.phone-field__country-chevron {
+  position: absolute;
+  right: var(--fixed-100, 8px);
+  pointer-events: none;
+  color: var(--colour-text-moderate-neutral);
+  transition: transform 0.2s ease;
+}
+
+.phone-field__country-wrapper[data-open] .phone-field__country-chevron {
+  transform: rotate(180deg);
 }
 
 /* ── Divider ──────────────────────────────────────────────────────────────── */
