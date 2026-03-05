@@ -82,7 +82,6 @@
     "url": "https://github.com/RajatKashyapPrism/design-system.git"
   },
   "dependencies": {
-    "libphonenumber-js": "^1.12.38",
     "react-aria": ">=3.0.0"
   }
 }

@@ -1,404 +1,167 @@
 /*
- * PhoneField Component — Country selector + formatted phone input.
+ * PhoneField Component Styles
  *
- * Shares the same inset box-shadow border system, floating label pattern,
- * size variables, and token references as TextField.
+ * Composite outlined input: country code <select> + phone <input type="tel">.
+ * Label is always pinned at the top border (no float animation) because the
+ * country select always displays a visible value.
  *
- * --pf-inset          Inset border thickness (1.5px default, 2px active)
- * --pf-stroke         Inset border color
- * --pf-ring           Outer focus halo
- * --pf-padding-x      Left padding (trigger side) — also anchors the floating label
- * --pf-padding-x-end  Right padding (input side) — narrower than trigger side
- * --pf-input-pt       Input top padding (space for floating label)
- * --pf-input-pb       Input bottom padding
- * --pf-font-size      Font size for input text and resting label
- * --pf-label-float-size  Font size when label is floating
- * --pf-border-radius     Container border radius
+ * Focus state on the outer wrapper is driven by CSS :focus-within so either
+ * child (select or input) being focused activates the brand border.
  */
 
-/* ── Outer wrapper ─────────────────────────────────────────────────────────── */
+/* ── Root ─────────────────────────────────────────────────────────────────── */
 
 .phone-field {
-  position: relative; /* anchor for the dropdown */
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-  gap: var(--fixed-50, 4px);
-  font-family: var(--font-family-body, 'Inter'), sans-serif;
+  gap: var(--fixed-100, 8px);
+  min-width: 240px;
+  font-family: var(--font-family-body, Inter), sans-serif;
 }
 
-/* ── Container ─────────────────────────────────────────────────────────────── */
+/* ── Wrapper — single outlined box ───────────────────────────────────────── */
 
-.phone-field__container {
-  --pf-inset: 1.5px;
-  --pf-stroke: var(--colour-border-subtle-neutral, #d1d5db);
-  --pf-ring: 0 0 0 0 transparent;
-
+.phone-field__wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  /* Right padding only — left padding lives on the trigger so the label aligns with it */
-  padding: 0 var(--pf-padding-x-end, 12px) 0 0;
-  background-color: var(--colour-background-subtle-neutral-1, #ffffff);
-  border: none;
-  border-radius: var(--pf-border-radius, var(--size-border-radius-md, 8px));
-  box-shadow: inset 0 0 0 var(--pf-inset) var(--pf-stroke), var(--pf-ring);
-  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+
+  background: var(--colour-background-subtle-neutral-1, #fff);
+  border: 1px solid var(--colour-border-subtle-neutral, #d0d5dd);
+  border-radius: var(--button-size-border-radius-sm, 8px);
+
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.phone-field__container:not([data-disabled]):hover {
-  --pf-inset: 2px;
-  --pf-stroke: var(--colour-border-moderate-neutral, #6b7280);
+/* Focused: any child focused activates brand border */
+.phone-field__wrapper:focus-within {
+  border-color: var(--colour-border-intense-brand-secondary);
+  box-shadow: inset 0 0 0 1px var(--colour-border-intense-brand-secondary);
 }
 
-.phone-field__container[data-focused] {
-  --pf-inset: 2px;
-  --pf-stroke: var(--colour-border-intense-brand-secondary);
-}
-
-.phone-field__container[data-focus-visible] {
-  --pf-ring: 0 0 0 3px color-mix(in srgb, var(--colour-border-intense-brand-secondary) 25%, transparent);
-}
-
-.phone-field--error .phone-field__container,
-.phone-field__container[data-invalid] {
-  --pf-inset: 2px;
-  --pf-stroke: var(--colour-border-intense-negative, #dc2626);
-  background-color: var(--colour-background-subtle-negative, #fef2f2);
-}
-
-.phone-field--error .phone-field__container[data-focus-visible],
-.phone-field__container[data-invalid][data-focus-visible] {
-  --pf-ring: 0 0 0 3px color-mix(in srgb, var(--colour-border-intense-negative, #dc2626) 25%, transparent);
-}
-
-.phone-field__container[data-disabled] {
-  --pf-inset: 2px;
-  --pf-stroke: var(--colour-border-subtle-neutral, #d1d5db);
-  background-color: var(--colour-background-subtle-neutral-3, #f3f4f6);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* ── Floating label ────────────────────────────────────────────────────────── */
+/* ── Floating label — always pinned at top ────────────────────────────────── */
 
 .phone-field__label {
   position: absolute;
-  left: var(--pf-padding-x, 12px);
-  top: var(--pf-label-center, 31px);
-  transform: translateY(-50%);
-  font-size: var(--pf-font-size, 14px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: 1;
-  color: var(--colour-text-subtle-neutral, #9ca3af);
-  pointer-events: none;
-  white-space: nowrap;
-  transition:
-    top 0.15s ease,
-    transform 0.15s ease,
-    font-size 0.15s ease,
-    font-weight 0.15s ease,
-    color 0.15s ease,
-    padding 0.15s ease,
-    left 0.15s ease;
-  z-index: 1;
-}
-
-.phone-field__container[data-floating] .phone-field__label {
+  left: var(--scale-100, 12px);
   top: 0;
   transform: translateY(-50%);
-  font-size: var(--pf-label-float-size, 11px);
-  font-weight: var(--font-weight-medium, 600);
-  color: var(--colour-text-intense-neutral, #1a1a2e);
-  padding: 0 3px;
-  left: calc(var(--pf-padding-x, 12px) - 3px);
-  background-color: var(--colour-background-subtle-neutral-1, #ffffff);
-  border-radius: 2px;
+
+  font-family: inherit;
+  font-size: var(--font-size-caption, 12px);
+  line-height: 1;
+  color: var(--colour-text-moderate-neutral);
+
+  pointer-events: none;
+  padding: 0 var(--fixed-50, 4px);
+  background: var(--colour-background-subtle-neutral-1, #fff);
 }
 
-.phone-field__container[data-focused][data-floating] .phone-field__label {
-  color: var(--colour-border-intense-brand-secondary);
+/* Brand colour on label when any child is focused */
+.phone-field__wrapper:focus-within ~ * .phone-field__label,
+.phone-field__wrapper:focus-within .phone-field__label {
+  color: var(--colour-text-intense-brand-secondary);
 }
 
-.phone-field--error .phone-field__container[data-floating] .phone-field__label,
-.phone-field__container[data-invalid][data-floating] .phone-field__label {
-  color: var(--colour-border-intense-negative, #dc2626);
-  background-color: var(--colour-background-subtle-negative, #fef2f2);
-}
+/* ── Country selector ─────────────────────────────────────────────────────── */
 
-/* ── Country selector trigger ──────────────────────────────────────────────── */
+.phone-field__country {
+  flex-shrink: 0;
 
-.phone-field__country-trigger {
-  display: flex;
-  align-items: center;
-  gap: var(--fixed-50, 4px);
-  /* Left padding matches the label's left anchor (--pf-padding-x) */
-  padding: var(--pf-input-pt, 18px) 0 var(--pf-input-pb, 8px) var(--pf-padding-x, 16px);
-  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
-  color: var(--colour-text-intense-neutral, #1a1a2e);
+
+  padding: var(--fixed-150, 12px) var(--fixed-100, 8px) var(--fixed-150, 12px) var(--scale-100, 12px);
+
   font-family: inherit;
-  font-size: var(--pf-font-size, 14px);
-  font-weight: var(--font-weight-medium, 600);
-  line-height: var(--font-line-height-subtitle-2, 22px);
-  flex-shrink: 0;
-  white-space: nowrap;
-  transition: color 0.15s ease;
+  font-size: var(--font-size-subtitle-2, 14px);
+  color: var(--colour-text-intense-neutral);
+
+  /* Prevent select from stretching the layout */
+  max-width: 96px;
 }
 
-.phone-field__country-trigger:disabled {
+.phone-field__country:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-.phone-field__country-trigger:not(:disabled):hover {
-  color: var(--colour-border-intense-brand-secondary);
-}
-
-.phone-field__flag {
-  font-size: 1.1em;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-}
-
-.phone-field__dialcode {
-  font-variant-numeric: tabular-nums;
-  min-width: 28px;
-}
-
-/* ── Divider ────────────────────────────────────────────────────────────────── */
+/* ── Divider ──────────────────────────────────────────────────────────────── */
 
 .phone-field__divider {
-  display: block;
   width: 1px;
   align-self: stretch;
-  background-color: var(--colour-border-subtle-neutral, #d1d5db);
-  margin: var(--pf-input-pb, 10px) var(--fixed-100, 8px);
+  background: var(--colour-border-subtle-neutral, #d0d5dd);
   flex-shrink: 0;
-  transition: background-color 0.15s ease;
+  margin: var(--fixed-100, 8px) 0;
 }
 
-.phone-field__container[data-focused] .phone-field__divider {
-  background-color: var(--colour-border-intense-brand-secondary);
-}
-
-.phone-field--error .phone-field__divider,
-.phone-field__container[data-invalid] .phone-field__divider {
-  background-color: var(--colour-border-intense-negative, #dc2626);
-}
-
-/* ── Phone number input ─────────────────────────────────────────────────────── */
+/* ── Phone number input ───────────────────────────────────────────────────── */
 
 .phone-field__input {
   flex: 1;
   min-width: 0;
+
+  padding: var(--fixed-150, 12px) var(--scale-100, 12px);
+
+  background: transparent;
   border: none;
   outline: none;
-  background: transparent;
-  padding: var(--pf-input-pt, 18px) 0 var(--pf-input-pb, 8px);
-  font-family: inherit;
-  font-size: var(--pf-font-size, 14px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-line-height-subtitle-2, 22px);
-  color: var(--colour-text-intense-neutral, #1a1a2e);
-  caret-color: var(--colour-border-intense-brand-secondary);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
 
-.phone-field__input::placeholder {
-  color: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-subtitle-2, 14px);
+  line-height: var(--font-line-height-subtitle-2, 22px);
+  color: var(--colour-text-intense-neutral);
 }
 
 .phone-field__input:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-.phone-field--error .phone-field__input,
-.phone-field__container[data-invalid] .phone-field__input {
-  caret-color: var(--colour-border-intense-negative, #dc2626);
+/* Keyboard focus ring on the number input only */
+.phone-field__input[data-focus-visible] {
+  outline: var(--fixed-25, 2px) solid var(--colour-border-intense-brand-secondary, currentColor);
+  outline-offset: var(--fixed-25, 2px);
+  border-radius: 0 var(--button-size-border-radius-sm, 8px) var(--button-size-border-radius-sm, 8px) 0;
 }
 
-/* ── Size variants ──────────────────────────────────────────────────────────── */
+/* ── Error state ──────────────────────────────────────────────────────────── */
 
-.phone-field--sm {
-  --pf-padding-x: var(--fixed-150, 12px);     /* px-3 on button side */
-  --pf-padding-x-end: var(--fixed-100, 8px);  /* px-2 on input side  */
-  --pf-input-pt: 14px;
-  --pf-input-pb: 6px;
-  --pf-font-size: var(--font-size-caption, 12px);
-  --pf-label-float-size: 10px;
-  --pf-border-radius: var(--size-border-radius-sm, 4px);
-  --pf-label-center: 22px; /* 14 + 16/2 */
+.phone-field[data-invalid] .phone-field__wrapper {
+  border-color: var(--colour-border-intense-negative);
 }
 
-.phone-field--md {
-  --pf-padding-x: var(--scale-150, 16px);     /* px-4 on button side */
-  --pf-padding-x-end: var(--scale-100, 12px); /* px-3 on input side  */
-  --pf-input-pt: 18px;
-  --pf-input-pb: 8px;
-  --pf-font-size: var(--font-size-subtitle-2, 14px);
-  --pf-label-float-size: 11px;
-  --pf-border-radius: var(--size-border-radius-md, 8px);
-  --pf-label-center: 29px; /* 18 + 22/2 */
+.phone-field[data-invalid] .phone-field__wrapper:focus-within {
+  border-color: var(--colour-border-intense-negative);
+  box-shadow: inset 0 0 0 1px var(--colour-border-intense-negative);
 }
 
-.phone-field--lg {
-  --pf-padding-x: var(--scale-200, 20px);     /* px-5 on button side */
-  --pf-padding-x-end: var(--scale-150, 16px); /* px-4 on input side  */
-  --pf-input-pt: 22px;
-  --pf-input-pb: 10px;
-  --pf-font-size: var(--font-size-subtitle-1, 16px);
-  --pf-label-float-size: 12px;
-  --pf-border-radius: var(--size-border-radius-lg, 12px);
-  --pf-label-center: 34px; /* 22 + 24/2 */
+.phone-field[data-invalid] .phone-field__wrapper:focus-within .phone-field__label {
+  color: var(--colour-text-intense-negative);
 }
 
-/* ── Dropdown panel ─────────────────────────────────────────────────────────── */
-
-.phone-field__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background-color: var(--colour-background-subtle-neutral-1, #ffffff);
-  border-radius: var(--size-border-radius-md, 8px);
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    inset 0 0 0 1.5px var(--colour-border-subtle-neutral, #d1d5db);
-  z-index: 50;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  max-height: 280px;
-}
-
-/* ── Search input inside dropdown ───────────────────────────────────────────── */
-
-.phone-field__search-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--fixed-100, 8px);
-  padding: var(--fixed-100, 8px) var(--fixed-150, 12px);
-  border-bottom: 1px solid var(--colour-border-subtle-neutral, #d1d5db);
-  color: var(--colour-text-moderate-neutral, #6b7280);
-  flex-shrink: 0;
-}
-
-.phone-field__search {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-family: inherit;
-  font-size: var(--font-size-caption, 12px);
-  color: var(--colour-text-intense-neutral, #1a1a2e);
-  line-height: var(--font-line-height-caption, 16px);
-}
-
-.phone-field__search::placeholder {
-  color: var(--colour-text-subtle-neutral, #9ca3af);
-}
-
-/* ── Country list ───────────────────────────────────────────────────────────── */
-
-.phone-field__country-list {
-  list-style: none;
-  margin: 0;
-  padding: var(--fixed-50, 4px) 0;
-  overflow-y: auto;
-  flex: 1;
-  overscroll-behavior: contain;
-}
-
-.phone-field__country-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.phone-field__country-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.phone-field__country-list::-webkit-scrollbar-thumb {
-  background: var(--colour-border-subtle-neutral, #d1d5db);
-  border-radius: 2px;
-}
-
-/* ── Country option ─────────────────────────────────────────────────────────── */
-
-.phone-field__country-option {
-  display: flex;
-  align-items: center;
-  gap: var(--fixed-100, 8px);
-  padding: var(--fixed-100, 8px) var(--fixed-150, 12px);
-  cursor: pointer;
-  transition: background-color 0.1s ease;
-  font-size: var(--font-size-caption, 12px);
-  line-height: var(--font-line-height-caption, 16px);
-  color: var(--colour-text-intense-neutral, #1a1a2e);
-}
-
-.phone-field__country-option--focused,
-.phone-field__country-option:hover {
-  background-color: var(--colour-background-subtle-neutral-2, #f9fafb);
-}
-
-.phone-field__country-option--active {
-  background-color: var(--colour-background-subtle-brand-primary, #f5f3ff);
-  color: var(--colour-border-intense-brand-secondary);
-  font-weight: var(--font-weight-medium, 600);
-}
-
-.phone-field__option-flag {
-  font-size: 1.1em;
-  line-height: 1;
-  flex-shrink: 0;
-  width: 20px;
-  text-align: center;
-}
-
-.phone-field__option-name {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.phone-field__option-dialcode {
-  font-variant-numeric: tabular-nums;
-  color: var(--colour-text-moderate-neutral, #6b7280);
-  font-size: var(--font-size-micro, 10px);
-  flex-shrink: 0;
-}
-
-.phone-field__country-option--active .phone-field__option-dialcode {
-  color: var(--colour-border-intense-brand-secondary);
-}
-
-.phone-field__no-results {
-  padding: var(--fixed-150, 12px);
-  font-size: var(--font-size-caption, 12px);
-  color: var(--colour-text-subtle-neutral, #9ca3af);
-  text-align: center;
-}
-
-/* ── Helper / Error text ────────────────────────────────────────────────────── */
-
-.phone-field__description,
-.phone-field__error {
-  font-size: var(--font-size-caption, 12px);
-  line-height: var(--font-line-height-caption, 16px);
-  font-weight: var(--font-weight-regular, 400);
-  padding: 0 var(--fixed-50, 4px);
-}
+/* ── Helper / error message ───────────────────────────────────────────────── */
 
 .phone-field__description {
-  color: var(--colour-text-moderate-neutral, #6b7280);
+  font-size: var(--font-size-caption, 12px);
+  color: var(--colour-text-moderate-neutral);
+  padding-left: var(--scale-100, 12px);
 }
 
 .phone-field__error {
-  color: var(--colour-text-intense-negative, #dc2626);
+  font-size: var(--font-size-caption, 12px);
+  color: var(--colour-text-intense-negative);
+  padding-left: var(--scale-100, 12px);
+}
+
+/* ── Disabled state ───────────────────────────────────────────────────────── */
+
+.phone-field[aria-disabled='true'] .phone-field__wrapper {
+  opacity: 0.5;
+  background: var(--colour-background-subtle-neutral-2, #f9fafb);
 }
