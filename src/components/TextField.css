@@ -1,0 +1,293 @@
+/*
+ * TextField Component — MUI Outlined Variant Style
+ *
+ * The label acts as a placeholder when the field is empty and unfocused.
+ * On focus or when a value is present, the label floats up to sit on the
+ * top border. A background on the floating label creates a visual "notch"
+ * cutting through the border line.
+ *
+ * Tokens from src/tokens/desktop/oyo/theme.css.
+ * Responsive via --scale-* overrides in mobile/responsive.css.
+ *
+ * Size variables (set per .text-field--{size}):
+ *   --tf-padding-x        Horizontal padding inside the container
+ *   --tf-input-pt         Input top padding (pushes text below the floating label)
+ *   --tf-input-pb         Input bottom padding
+ *   --tf-font-size        Font size for both label and input text
+ *   --tf-label-float-size Font size for the label when floating
+ *   --tf-border-radius    Border radius of the container
+ *   --tf-icon-size        Icon dimensions
+ */
+
+/* ── Outer wrapper ────────────────────────────────────────────────────────── */
+
+.text-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fixed-50, 4px);
+  font-family: var(--font-family-body, 'Inter'), sans-serif;
+}
+
+/* ── Container (the visible outlined box) ────────────────────────────────── */
+/*
+ * Border is rendered via inset box-shadow, NOT via border-width.
+ * This means changing the visual border thickness never shifts the layout —
+ * box-shadow has no impact on the box model.
+ *
+ * --tf-inset      Controls inset border thickness (1.5px default, 2px active)
+ * --tf-stroke     Controls inset border color
+ * --tf-ring       Controls the outer focus halo (default: transparent)
+ */
+
+.text-field__container {
+  --tf-inset: 1.5px;
+  --tf-stroke: var(--colour-border-subtle-neutral, #d1d5db);
+  --tf-ring: 0 0 0 0 transparent;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--tf-padding-x, 12px);
+  background-color: var(--colour-background-subtle-neutral-1, #ffffff);
+  border: none;
+  border-radius: var(--tf-border-radius, var(--size-border-radius-md, 8px));
+  box-shadow: inset 0 0 0 var(--tf-inset) var(--tf-stroke), var(--tf-ring);
+  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+  cursor: text;
+}
+
+/* Hover */
+.text-field__container:not([data-disabled]):hover {
+  --tf-inset: 2px;
+  --tf-stroke: var(--colour-border-moderate-neutral, #6b7280);
+}
+
+/* Focused */
+.text-field__container[data-focused] {
+  --tf-inset: 2px;
+  --tf-stroke: var(--colour-border-intense-brand-secondary);
+}
+
+/* Focus-visible ring (keyboard navigation) */
+.text-field__container[data-focus-visible] {
+  --tf-ring: 0 0 0 3px color-mix(in srgb, var(--colour-border-intense-brand-secondary) 25%, transparent);
+}
+
+/* Variant: error */
+.text-field--error .text-field__container,
+.text-field__container[data-invalid] {
+  --tf-inset: 2px;
+  --tf-stroke: var(--colour-border-intense-negative, #dc2626);
+  background-color: var(--colour-background-subtle-negative, #fef2f2);
+}
+
+.text-field--error .text-field__container[data-focus-visible],
+.text-field__container[data-invalid][data-focus-visible] {
+  --tf-ring: 0 0 0 3px color-mix(in srgb, var(--colour-border-intense-negative, #dc2626) 25%, transparent);
+}
+
+/* Variant: success */
+.text-field--success .text-field__container {
+  --tf-inset: 2px;
+  --tf-stroke: var(--colour-border-intense-positive, #059669);
+  background-color: var(--colour-background-subtle-positive, #f0fdf4);
+}
+
+.text-field--success .text-field__container[data-focus-visible] {
+  --tf-ring: 0 0 0 3px color-mix(in srgb, var(--colour-border-intense-positive, #059669) 25%, transparent);
+}
+
+/* Disabled */
+.text-field__container[data-disabled] {
+  --tf-inset: 2px;
+  --tf-stroke: var(--colour-border-subtle-neutral, #d1d5db);
+  background-color: var(--colour-background-subtle-neutral-3, #f3f4f6);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ── Floating label ───────────────────────────────────────────────────────── */
+
+.text-field__label {
+  position: absolute;
+  left: var(--tf-padding-x, 12px);
+  /* Align label center with input text center: input-pt + line-height/2.
+     Using top:50% is wrong because the input has asymmetric padding (pt > pb). */
+  top: var(--tf-label-center, 31px);
+  transform: translateY(-50%);
+  font-size: var(--tf-font-size, 14px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: 1;
+  color: var(--colour-text-subtle-neutral, #9ca3af);
+  pointer-events: none;
+  white-space: nowrap;
+  transition:
+    top 0.15s ease,
+    transform 0.15s ease,
+    font-size 0.15s ease,
+    font-weight 0.15s ease,
+    color 0.15s ease,
+    padding 0.15s ease,
+    left 0.15s ease;
+  z-index: 1;
+}
+
+/* Offset label when there's a leading icon */
+.text-field__container[data-has-leading-icon] .text-field__label {
+  left: calc(var(--tf-padding-x, 12px) + var(--tf-icon-size, 16px) + var(--fixed-100, 8px));
+}
+
+/* ── Floating state ───────────────────────────────────────────────────────── */
+
+.text-field__container[data-floating] .text-field__label {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: var(--tf-label-float-size, 11px);
+  font-weight: var(--font-weight-medium, 600);
+  color: var(--colour-text-intense-neutral, #1a1a2e);
+  padding: 0 3px;
+  left: calc(var(--tf-padding-x, 12px) - 3px);
+  /* White background cuts the border line to create the "notch" */
+  background-color: var(--colour-background-subtle-neutral-1, #ffffff);
+  border-radius: 2px;
+}
+
+/* Label returns to left edge when floating (even with leading icon) */
+.text-field__container[data-has-leading-icon][data-floating] .text-field__label {
+  left: calc(var(--tf-padding-x, 12px) - 3px);
+}
+
+/* Focused: brand color on the floating label */
+.text-field__container[data-focused][data-floating] .text-field__label {
+  color: var(--colour-border-intense-brand-secondary);
+}
+
+/* Error: negative color on the floating label */
+.text-field--error .text-field__container[data-floating] .text-field__label,
+.text-field__container[data-invalid][data-floating] .text-field__label {
+  color: var(--colour-border-intense-negative, #dc2626);
+  background-color: var(--colour-background-subtle-negative, #fef2f2);
+}
+
+/* Success: positive color on the floating label */
+.text-field--success .text-field__container[data-floating] .text-field__label {
+  color: var(--colour-border-intense-positive, #059669);
+  background-color: var(--colour-background-subtle-positive, #f0fdf4);
+}
+
+/* ── Input element ────────────────────────────────────────────────────────── */
+
+.text-field__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  /* Top padding creates room for the floating label above the text */
+  padding: var(--tf-input-pt, 20px) 0 var(--tf-input-pb, 10px);
+  font-family: inherit;
+  font-size: var(--tf-font-size, 14px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-line-height-subtitle-2, 22px);
+  color: var(--colour-text-intense-neutral, #1a1a2e);
+  caret-color: var(--colour-border-intense-brand-secondary);
+  width: 100%;
+}
+
+/* Hide native placeholder — label acts as the placeholder */
+.text-field__input::placeholder {
+  color: transparent;
+}
+
+.text-field__input:disabled {
+  cursor: not-allowed;
+  color: var(--colour-text-subtle-neutral, #9ca3af);
+}
+
+/* Error caret color */
+.text-field--error .text-field__input,
+.text-field__container[data-invalid] .text-field__input {
+  caret-color: var(--colour-border-intense-negative, #dc2626);
+}
+
+/* ── Size variants ────────────────────────────────────────────────────────── */
+
+.text-field--sm {
+  --tf-padding-x: var(--fixed-100, 8px);
+  --tf-input-pt: 16px;
+  --tf-input-pb: 6px;
+  --tf-font-size: var(--font-size-caption, 12px);
+  --tf-label-float-size: 10px;
+  --tf-border-radius: var(--size-border-radius-sm, 4px);
+  --tf-icon-size: var(--fixed-200, 16px);
+  --tf-label-center: 24px; /* 16 + 16/2 */
+}
+
+.text-field--md {
+  --tf-padding-x: var(--scale-100, 12px);
+  --tf-input-pt: 20px;
+  --tf-input-pb: 10px;
+  --tf-font-size: var(--font-size-subtitle-2, 14px);
+  --tf-label-float-size: 11px;
+  --tf-border-radius: var(--size-border-radius-md, 8px);
+  --tf-icon-size: var(--fixed-200, 16px);
+  --tf-label-center: 31px; /* 20 + 22/2 */
+}
+
+.text-field--lg {
+  --tf-padding-x: var(--scale-150, 16px);
+  --tf-input-pt: 26px;
+  --tf-input-pb: 12px;
+  --tf-font-size: var(--font-size-subtitle-1, 16px);
+  --tf-label-float-size: 12px;
+  --tf-border-radius: var(--size-border-radius-lg, 12px);
+  --tf-icon-size: var(--fixed-300, 24px);
+  --tf-label-center: 38px; /* 26 + 24/2 */
+}
+
+/* ── Icons ────────────────────────────────────────────────────────────────── */
+
+.text-field__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--colour-border-moderate-neutral);
+  width: var(--tf-icon-size, 16px);
+  height: var(--tf-icon-size, 16px);
+}
+
+.text-field__icon--leading {
+  margin-right: var(--fixed-100, 8px);
+}
+
+.text-field__icon--trailing {
+  margin-left: var(--fixed-100, 8px);
+}
+
+.text-field--error .text-field__icon,
+.text-field__container[data-invalid] .text-field__icon {
+  color: var(--colour-border-intense-negative);
+}
+
+.text-field--success .text-field__icon {
+  color: var(--colour-border-intense-positive);
+}
+
+/* ── Description & Error message ──────────────────────────────────────────── */
+
+.text-field__description,
+.text-field__error {
+  font-size: var(--font-size-caption, 12px);
+  line-height: var(--font-line-height-caption, 16px);
+  font-weight: var(--font-weight-regular, 400);
+  padding: 0 var(--fixed-50, 4px);
+}
+
+.text-field__description {
+  color: var(--colour-text-moderate-neutral, #6b7280);
+}
+
+.text-field__error {
+  color: var(--colour-text-intense-negative, #dc2626);
+}
