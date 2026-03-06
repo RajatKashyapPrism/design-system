@@ -30,6 +30,17 @@ export const Primary: Story = {
   args: { label: 'Button', variant: 'primary', size: 'md' },
 }
 
+export const PrimaryAllSizes: Story = {
+  render: () => (
+    <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '16px' }}>
+      <Button label="Button" variant="primary" size="xs" leadingIcon trailingIcon />
+      <Button label="Button" variant="primary" size="sm" leadingIcon trailingIcon />
+      <Button label="Button" variant="primary" size="md" leadingIcon trailingIcon />
+      <Button label="Button" variant="primary" size="lg" leadingIcon trailingIcon />
+    </div>
+  ),
+}
+
 export const Secondary: Story = {
   args: { label: 'Button', variant: 'secondary', size: 'md' },
 }
