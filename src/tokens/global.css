@@ -78,12 +78,12 @@
 
 /* colours — light */
 :root {
-  --asphalt-50: #f5f5f5;
   --achromatic-00: #ffffff;
+  --asphalt-50: #f5f5f5;
   --asphalt-100: #f1f1f1;
   --achromatic-black: #212121;
-  --asphalt-200: #dddddd;
   --achromatic-white: #ffffff;
+  --asphalt-200: #dddddd;
   --asphalt-300: #c5c5c5;
   --asphalt-400: #aaaaaa;
   --asphalt-500: #868686;
@@ -313,12 +313,12 @@
 
 /* colours — dark */
 [data-theme="dark"] {
-  --asphalt-50: #191919;
   --achromatic-00: #1d1d1d;
+  --asphalt-50: #191919;
   --asphalt-100: #282828;
   --achromatic-black: #212121;
-  --asphalt-200: #383838;
   --achromatic-white: #ffffff;
+  --asphalt-200: #383838;
   --asphalt-300: #505050;
   --asphalt-400: #6c6c6c;
   --asphalt-500: #7e7e7e;
